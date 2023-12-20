@@ -57,7 +57,7 @@ install_kiauh() {
     cd ~ && git clone https://github.com/dw-0/kiauh.git
 
     ### sourcing all additional scripts
-    KIAUH_SRCDIR="$(dirname -- "$(readlink -f "${BASH_SOURCE[0]}")")"
+    KIAUH_SRCDIR="${HOME}/kiauh"
     # shellcheck disable=SC1090
     for script in "${KIAUH_SRCDIR}/scripts/"*.sh; do . "${script}"; done
     # shellcheck disable=SC1090
