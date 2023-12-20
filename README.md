@@ -12,10 +12,16 @@ significant changes.
 ## Installation
 
 This repo assumes an installation of Raspberry Pi OS Lite (32bit). Once
-installed, you can run the install script below to install the printer config.
+installed, make sure you have git installed:
+
+``` bash
+sudo apt-get update && sudo apt-get install git -y
+```
+You can then clone the config and run the install script below to install the printer config.
 
 ```bash
-wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh | bash
+cd ~ && git clone git@github.com:Gethe/klipper_config.git
+chmod +x ./klipper_config/install.sh && ./klipper_config/install.sh
 ```
 
 This will install [KIAUH], through which you can install [Danger Klipper],
