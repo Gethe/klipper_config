@@ -24,18 +24,19 @@ cd ~ && git clone git@github.com:Gethe/klipper_config.git custom_config
 chmod +x ./custom_config/install.sh && ./custom_config/install.sh
 ```
 
-This will install [KIAUH], through which you can install [Danger Klipper],
-[Moonraker], [Mainsail], as well as the config files in this repo. The script
-will use the Pi's hostname to determine which specific config will be used.
+This will install [KIAUH], through which [Danger Klipper], [Moonraker], and
+[Mainsail] will be installed. When that is finished, the config files in this
+repo will be symlinked to the correct places. The script will use the Pi's
+hostname to determine which specific config will be used.
 
 ## Credits
 
 A lot of inspiration outside of my own has gone into this config, and it would
 be remiss of me to not place credit where it is due.
 
-[RatOS Config] and [klippain] - Generally the concept of a modular config
-[KIAUH] - Installation scripts for klipper, moonraker, and mainsail
-[klippain] - Interactive install script
+[RatOS Config]
+[klippain]
+[KIAUH]
 Drachenkatze - [Automating Klipper MCU Updates](https://docs.vorondesign.com/community/howto/drachenkatze/automating_klipper_mcu_updates.html)
 
 [Danger Klipper]: https://github.com/DangerKlippers/danger-klipper

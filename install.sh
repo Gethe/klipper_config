@@ -16,15 +16,6 @@ source "$REPO_CONFIG_PATH"/common/scripts/utils.sh
 
 check_root
 
-install_kiauh() {
-    report_status "Installing KIAUH"
-
-    cd ~ && git clone https://github.com/dw-0/kiauh.git
-    echo "DangerKlippers/danger-klipper" >> ~/kiauh/klipper_repos.txt
-
-    ~/kiauh/kiauh.sh
-}
-
 PRINTER=$(cat <<-END
 [include printer_base.cfg
 [include variables.cfg
@@ -59,8 +50,36 @@ MOONRAKER=$(cat <<-END
 END
 
 )
+
+install_kiauh() {
+    report_status "Installing KIAUH"
+
+    cd ~ && git clone https://github.com/dw-0/kiauh.git
+
+    ### sourcing all additional scripts
+    KIAUH_SRCDIR="$(dirname -- "$(readlink -f "${BASH_SOURCE[0]}")")"
+    # shellcheck disable=SC1090
+    for script in "${KIAUH_SRCDIR}/scripts/"*.sh; do . "${script}"; done
+    # shellcheck disable=SC1090
+    for script in "${KIAUH_SRCDIR}/scripts/ui/"*.sh; do . "${script}"; done
+
+    set_globals
+
+    source "$REPO_CONFIG_PATH"/common/scripts/overrides.sh
+}
+install_firmware() {
+    switch_klipper_repo DangerKlippers/danger-klipper master
+    run_klipper_setup 3 "printer"
+
+    moonraker_setup 1 "printer"
+
+    install_mainsail
+}
 install_printer_config() {
     report_status "Installing printer configuration for $hostname"
+
+    rm -f "$USER_CONFIG_PATH"/printer.cfg
+    rm -f "$USER_CONFIG_PATH"/moonraker.conf
 
     chmod -R +x "$REPO_CONFIG_PATH"/common/scripts
 
@@ -76,4 +95,5 @@ install_printer_config() {
 }
 
 install_kiauh
+install_firmware
 install_printer_config
