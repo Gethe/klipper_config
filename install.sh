@@ -4,14 +4,12 @@
 USER_CONFIG_PATH="${HOME}/printer_data/config"
 # Where repository config files will go (read-only and keep untouched)
 REPO_CONFIG_PATH="${HOME}/klipper_config"
-# Where the Klipper folder is located (ie. the internal Klipper firmware machinery)
-KLIPPER_PATH="${HOME}/klipper"
 
 hostname=$(hostname -s)
 HOST_CONFIG_PATH="$REPO_CONFIG_PATH/$hostname"
 
 # Force script to exit if an error occurs
-set -xe
+set -e
 
 # shellcheck source=common/scripts/utils.sh
 source "$REPO_CONFIG_PATH"/common/scripts/utils.sh
@@ -28,8 +26,8 @@ install_kiauh() {
 }
 
 PRINTER=$(cat <<-END
-[include $USER_CONFIG_PATH/printer_base.cfg
-[include $USER_CONFIG_PATH/variables.cfg
+[include printer_base.cfg
+[include variables.cfg
 
 [gcode_macro VARS]
 gcode:
@@ -56,7 +54,7 @@ END
 
 )
 MOONRAKER=$(cat <<-END
-[include $USER_CONFIG_PATH/moonraker_base.conf]
+[include moonraker_base.conf]
 
 END
 
