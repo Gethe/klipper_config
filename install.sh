@@ -81,8 +81,6 @@ install_printer_config() {
     rm -f "$USER_CONFIG_PATH"/printer.cfg
     rm -f "$USER_CONFIG_PATH"/moonraker.conf
 
-    chmod -R +x "$REPO_CONFIG_PATH"/common/scripts
-
     ln -sf "$REPO_CONFIG_PATH"/common "$USER_CONFIG_PATH"/common
     ln -sf "$HOST_CONFIG_PATH"/.theme "$USER_CONFIG_PATH"/.theme
 
