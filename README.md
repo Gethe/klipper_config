@@ -20,8 +20,8 @@ sudo apt-get update && sudo apt-get install git -y
 You can then clone the config and run the install script below to install the printer config.
 
 ```bash
-cd ~ && git clone git@github.com:Gethe/klipper_config.git
-chmod +x ./klipper_config/install.sh && ./klipper_config/install.sh
+cd ~ && git clone git@github.com:Gethe/klipper_config.git custom_config
+chmod +x ./custom_config/install.sh && ./custom_config/install.sh
 ```
 
 This will install [KIAUH], through which you can install [Danger Klipper],

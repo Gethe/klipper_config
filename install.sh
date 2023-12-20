@@ -3,7 +3,7 @@
 # Where the user Klipper config is located (ie. the one used by Klipper to work)
 USER_CONFIG_PATH="${HOME}/printer_data/config"
 # Where repository config files will go (read-only and keep untouched)
-REPO_CONFIG_PATH="${HOME}/klipper_config"
+REPO_CONFIG_PATH="${HOME}/custom_config"
 
 hostname=$(hostname -s)
 HOST_CONFIG_PATH="$REPO_CONFIG_PATH/$hostname"
