@@ -10,7 +10,7 @@ HOST_CONFIG_PATH="$REPO_CONFIG_PATH/$hostname"
 KIAUH_SRCDIR="${HOME}/kiauh"
 
 # Force script to exit if an error occurs
-set -e
+set -xe
 
 # shellcheck source=common/scripts/utils.sh
 source "$REPO_CONFIG_PATH"/common/scripts/utils.sh

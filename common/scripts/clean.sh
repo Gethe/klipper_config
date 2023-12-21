@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -xe
+
 KIAUH_SRCDIR="${HOME}/kiauh"
 
 # shellcheck source=../kiauh/scripts/globals.sh
