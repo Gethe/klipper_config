@@ -54,23 +54,27 @@ END
 
 install_kiauh() {
     report_status "Installing KIAUH"
-    echo "$KIAUH_SRCDIR"
 
     cd ~ && git clone https://github.com/dw-0/kiauh.git
 
-    ### sourcing all additional scripts
-    # shellcheck disable=SC1090
-    for script in "${KIAUH_SRCDIR}/scripts/"*.sh; do . "${script}"; done
-    # shellcheck disable=SC1090
-    for script in "${KIAUH_SRCDIR}/scripts/ui/"*.sh; do . "${script}"; done
+    # shellcheck source=../kiauh/scripts/klipper.sh
+    source "$KIAUH_SRCDIR"/scripts/klipper.sh
+    # shellcheck source=../kiauh/scripts/mainsail.sh
+    source "$KIAUH_SRCDIR"/scripts/mainsail.sh
+    # shellcheck source=../kiauh/scripts/moonraker.sh
+    source "$KIAUH_SRCDIR"/scripts/moonraker.sh
+    # shellcheck source=../kiauh/scripts/utilities.sh
+    source "$KIAUH_SRCDIR"/scripts/utilities.sh
+    # shellcheck source=../kiauh/scripts/globals.sh
+    source "$KIAUH_SRCDIR"/scripts/globals.sh
+    # shellcheck source=../kiauh/scripts/ui/general_ui.sh
+    source "$KIAUH_SRCDIR"/scripts/ui/general_ui.sh
 
     set_globals
 
     source "$REPO_CONFIG_PATH"/common/scripts/overrides.sh
-    echo "$KIAUH_SRCDIR"
 }
 install_firmware() {
-    echo "$KIAUH_SRCDIR"
     switch_klipper_repo DangerKlippers/danger-klipper master
     run_klipper_setup 3 "printer"
 
