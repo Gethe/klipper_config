@@ -57,16 +57,16 @@ install_kiauh() {
 
     cd ~ && git clone https://github.com/dw-0/kiauh.git
 
+    # shellcheck source=../kiauh/scripts/globals.sh
+    source "$KIAUH_SRCDIR"/scripts/globals.sh
+    # shellcheck source=../kiauh/scripts/utilities.sh
+    source "$KIAUH_SRCDIR"/scripts/utilities.sh
     # shellcheck source=../kiauh/scripts/klipper.sh
     source "$KIAUH_SRCDIR"/scripts/klipper.sh
     # shellcheck source=../kiauh/scripts/mainsail.sh
     source "$KIAUH_SRCDIR"/scripts/mainsail.sh
     # shellcheck source=../kiauh/scripts/moonraker.sh
     source "$KIAUH_SRCDIR"/scripts/moonraker.sh
-    # shellcheck source=../kiauh/scripts/utilities.sh
-    source "$KIAUH_SRCDIR"/scripts/utilities.sh
-    # shellcheck source=../kiauh/scripts/globals.sh
-    source "$KIAUH_SRCDIR"/scripts/globals.sh
 
     # shellcheck source=../kiauh/scripts/ui/general_ui.sh
     source "$KIAUH_SRCDIR"/scripts/ui/general_ui.sh
@@ -79,7 +79,7 @@ install_firmware() {
     set_custom_klipper_repo DangerKlippers/danger-klipper master
     run_klipper_setup 3 "printer"
 
-    moonraker_setup 1 "printer"
+    moonraker_setup 1
 
     install_mainsail
 }
