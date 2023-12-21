@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 KIAUH_SRCDIR="${HOME}/kiauh"
+
+# shellcheck source=../kiauh/scripts/utilities.sh
+source "$KIAUH_SRCDIR"/scripts/utilities.sh
 # shellcheck source=../kiauh/scripts/klipper.sh
 source "$KIAUH_SRCDIR"/scripts/klipper.sh
 # shellcheck source=../kiauh/scripts/mainsail.sh
