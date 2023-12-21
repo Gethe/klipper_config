@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 
+KIAUH_SRCDIR="${HOME}/kiauh"
+# shellcheck source=../kiauh/scripts/klipper.sh
+source "$KIAUH_SRCDIR"/scripts/klipper.sh
+# shellcheck source=../kiauh/scripts/mainsail.sh
+source "$KIAUH_SRCDIR"/scripts/mainsail.sh
+# shellcheck source=../kiauh/scripts/moonraker.sh
+source "$KIAUH_SRCDIR"/scripts/moonraker.sh
+
+remove_klipper
+remove_mainsail
+remove_moonraker
+
+rm -rf printer_data
+
 rm -rf kiauh
 rm -rf kiauh-backups
 rm -f .kiauh.ini
 
-rm -rf klipper
-rm -rf klippy-env
-
-rm -rf mainsail
-
-rm -rf moonraker
-rm -rf moonraker-env
-
-rm -rf printer_data

@@ -67,6 +67,7 @@ install_kiauh() {
     source "$KIAUH_SRCDIR"/scripts/utilities.sh
     # shellcheck source=../kiauh/scripts/globals.sh
     source "$KIAUH_SRCDIR"/scripts/globals.sh
+
     # shellcheck source=../kiauh/scripts/ui/general_ui.sh
     source "$KIAUH_SRCDIR"/scripts/ui/general_ui.sh
 
@@ -75,7 +76,7 @@ install_kiauh() {
     source "$REPO_CONFIG_PATH"/common/scripts/overrides.sh
 }
 install_firmware() {
-    switch_klipper_repo DangerKlippers/danger-klipper master
+    set_custom_klipper_repo DangerKlippers/danger-klipper master
     run_klipper_setup 3 "printer"
 
     moonraker_setup 1 "printer"
