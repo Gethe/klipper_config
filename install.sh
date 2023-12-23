@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 hostname=$(hostname -s)
+REPO_DIR="custom_config"
 
 # Where repository config files will go (read-only and keep untouched)
-REPO_CONFIG_PATH="${HOME}/custom_config"
+REPO_CONFIG_PATH="${HOME}/$REPO_DIR"
 # Repo sub-path for specific printer config files
 HOST_CONFIG_PATH="$REPO_CONFIG_PATH/$hostname"
 # Where the user accessable config is located (ie. the one used by Klipper to work)
@@ -31,7 +32,9 @@ sudo apt install git -y
 
 
 KIAUH_SRCDIR="${HOME}/kiauh"
-cd ~ && git clone https://github.com/dw-0/kiauh.git
+if [ ! -d "${KIAUH_SRCDIR}" ] ; then
+    cd ~ && git clone https://github.com/dw-0/kiauh.git
+fi
 
 # shellcheck source=../kiauh/scripts/globals.sh
 source "$KIAUH_SRCDIR"/scripts/globals.sh
@@ -50,7 +53,9 @@ source "$KIAUH_SRCDIR"/scripts/moonraker.sh
 set_globals
 
 
-git clone git@github.com:Gethe/klipper_config.git custom_config
+if [ ! -d "${REPO_CONFIG_PATH}" ] ; then
+    git clone git@github.com:Gethe/klipper_config.git $REPO_DIR
+fi
 source "$REPO_CONFIG_PATH"/common/scripts/overrides.sh
 
 
