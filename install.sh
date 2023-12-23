@@ -26,7 +26,7 @@ if [[ ${EUID} -eq 0 ]]; then
 fi
 
 
-sudo apt update && sudo apt full-upgrade
+sudo apt update && sudo apt full-upgrade -y
 sudo apt install git -y
 
 
