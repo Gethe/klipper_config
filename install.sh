@@ -36,12 +36,12 @@ if [ ! -d "${KIAUH_SRCDIR}" ] ; then
     cd ~ && git clone https://github.com/dw-0/kiauh.git
 fi
 
-# shellcheck source=../kiauh/scripts/globals.sh
-source "$KIAUH_SRCDIR"/scripts/globals.sh
-# shellcheck source=../kiauh/scripts/utilities.sh
-source "$KIAUH_SRCDIR"/scripts/utilities.sh
-# shellcheck source=../kiauh/scripts/ui/general_ui.sh
-source "$KIAUH_SRCDIR"/scripts/ui/general_ui.sh
+if [ ! -d "${REPO_CONFIG_PATH}" ] ; then
+    git clone git@github.com:Gethe/klipper_config.git $REPO_DIR
+fi
+
+
+source "$REPO_CONFIG_PATH"/common/scripts/utils.sh
 
 # shellcheck source=../kiauh/scripts/backup.sh
 source "$KIAUH_SRCDIR"/scripts/backup.sh
@@ -56,10 +56,6 @@ source "$KIAUH_SRCDIR"/scripts/nginx.sh
 
 set_globals
 
-
-if [ ! -d "${REPO_CONFIG_PATH}" ] ; then
-    git clone git@github.com:Gethe/klipper_config.git $REPO_DIR
-fi
 source "$REPO_CONFIG_PATH"/common/scripts/overrides.sh
 
 
@@ -131,3 +127,4 @@ END
 
 install_firmware
 install_printer_config
+source "$REPO_CONFIG_PATH"/common/scripts/flash.sh
