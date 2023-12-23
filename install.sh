@@ -94,8 +94,8 @@ install_printer_config() {
 
 
 PRINTER=$(cat <<-END
-[include printer_base.cfg
-[include variables.cfg
+[include printer_base.cfg]
+[include variables.cfg]
 
 [gcode_macro VARS]
 gcode:
