@@ -43,12 +43,16 @@ source "$KIAUH_SRCDIR"/scripts/utilities.sh
 # shellcheck source=../kiauh/scripts/ui/general_ui.sh
 source "$KIAUH_SRCDIR"/scripts/ui/general_ui.sh
 
+# shellcheck source=../kiauh/scripts/backup.sh
+source "$KIAUH_SRCDIR"/scripts/backup.sh
 # shellcheck source=../kiauh/scripts/klipper.sh
 source "$KIAUH_SRCDIR"/scripts/klipper.sh
 # shellcheck source=../kiauh/scripts/mainsail.sh
 source "$KIAUH_SRCDIR"/scripts/mainsail.sh
 # shellcheck source=../kiauh/scripts/moonraker.sh
 source "$KIAUH_SRCDIR"/scripts/moonraker.sh
+# shellcheck source=../kiauh/scripts/nginx.sh
+source "$KIAUH_SRCDIR"/scripts/nginx.sh
 
 set_globals
 
