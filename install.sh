@@ -88,6 +88,8 @@ install_printer_config() {
 
     echo "$PRINTER" >"$USER_CONFIG_PATH"/printer.cfg
     echo "$MOONRAKER" >"$USER_CONFIG_PATH"/moonraker.conf
+
+    print_confirm "All done!!"
 }
 
 
