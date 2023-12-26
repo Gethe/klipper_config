@@ -58,6 +58,12 @@ set_globals
 
 source "$REPO_CONFIG_PATH"/common/scripts/overrides.sh
 
+status_msg "Installing git hooks"
+if [[ ! -e "$REPO_CONFIG_PATH"/.git/hooks/post-merge ]]; then
+    ln -sf "$REPO_CONFIG_PATH"/common/scripts/update.sh "$REPO_CONFIG_PATH"/.git/hooks/post-merge
+    sudo chmod +x "$REPO_CONFIG_PATH"/.git/hooks/post-merge
+fi
+
 
 install_firmware() {
     status_msg "Installing printer firmware"
