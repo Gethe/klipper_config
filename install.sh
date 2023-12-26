@@ -76,7 +76,6 @@ install_printer_config() {
     rm -f "$USER_CONFIG_PATH"/moonraker.conf
 
     ln -sf "$REPO_CONFIG_PATH"/common "$USER_CONFIG_PATH"/common
-    ln -sf "$HOST_CONFIG_PATH"/.theme "$USER_CONFIG_PATH"/.theme
 
     ln -sf "$HOST_CONFIG_PATH"/variables.cfg "$USER_CONFIG_PATH"/variables.cfg
     ln -sf "$HOST_CONFIG_PATH"/printer.cfg "$USER_CONFIG_PATH"/printer_base.cfg
@@ -84,6 +83,10 @@ install_printer_config() {
 
     echo "$PRINTER" >"$USER_CONFIG_PATH"/printer.cfg
     echo "$MOONRAKER" >"$USER_CONFIG_PATH"/moonraker.conf
+
+    for file in "$REPO_CONFIG_PATH"/.theme/* "$HOST_CONFIG_PATH"/.theme/*; do
+        ln -sf "$file" "$USER_CONFIG_PATH"/.theme/"${file##/*/}"
+    done
 
     print_confirm "All done!!"
 }
