@@ -3,17 +3,8 @@
 hostname=$(hostname -s)
 REPO_DIR="custom_config"
 
-# Where repository config files will go (read-only and keep untouched)
-REPO_CONFIG_PATH="${HOME}/$REPO_DIR"
-# Repo sub-path for specific printer config files
-HOST_CONFIG_PATH="$REPO_CONFIG_PATH/$hostname"
-# Where the user accessable config is located (ie. the one used by Klipper to work)
-USER_CONFIG_PATH="${HOME}/printer_data/config"
-
-
 # Force script to exit if an error occurs
 set -e
-
 
 if [[ ${EUID} -eq 0 ]]; then
     echo -en "\e[91m"
@@ -37,7 +28,7 @@ if [ ! -d "${KIAUH_SRCDIR}" ] ; then
 fi
 
 if [ ! -d "${REPO_CONFIG_PATH}" ] ; then
-    git clone git@github.com:Gethe/klipper_config.git $REPO_DIR
+    git clone git@github.com:Gethe/klipper_config.git "$REPO_DIR"
 fi
 
 
@@ -54,9 +45,6 @@ source "$KIAUH_SRCDIR"/scripts/moonraker.sh
 # shellcheck source=../kiauh/scripts/nginx.sh
 source "$KIAUH_SRCDIR"/scripts/nginx.sh
 
-set_globals
-
-source "$REPO_CONFIG_PATH"/common/scripts/overrides.sh
 
 status_msg "Installing git hooks"
 if [[ ! -e "$REPO_CONFIG_PATH"/.git/hooks/post-merge ]]; then
@@ -83,24 +71,24 @@ install_printer_config() {
 
     ln -sf "$REPO_CONFIG_PATH"/common "$USER_CONFIG_PATH"/common
 
-    ln -sf "$HOST_CONFIG_PATH"/variables.cfg "$USER_CONFIG_PATH"/variables.cfg
-    ln -sf "$HOST_CONFIG_PATH"/printer.cfg "$USER_CONFIG_PATH"/printer_base.cfg
-    ln -sf "$HOST_CONFIG_PATH"/moonraker.conf "$USER_CONFIG_PATH"/moonraker_base.conf
+    ln -sf "$REPO_CONFIG_PATH/$hostname"/moonraker.conf "$USER_CONFIG_PATH"/_"$hostname".conf
+    ln -sf "$REPO_CONFIG_PATH/$hostname"/printer.cfg "$USER_CONFIG_PATH"/_"$hostname".cfg
+    ln -sf "$REPO_CONFIG_PATH/$hostname"/variables.cfg "$USER_CONFIG_PATH"/_variables.cfg
+
+    for file in "$REPO_CONFIG_PATH"/.theme/* "$REPO_CONFIG_PATH"/"$hostname"/.theme/*; do
+        ln -sf "$file" "$USER_CONFIG_PATH"/.theme/"${file##/*/}"
+    done
 
     echo "$PRINTER" >"$USER_CONFIG_PATH"/printer.cfg
     echo "$MOONRAKER" >"$USER_CONFIG_PATH"/moonraker.conf
-
-    for file in "$REPO_CONFIG_PATH"/.theme/* "$HOST_CONFIG_PATH"/.theme/*; do
-        ln -sf "$file" "$USER_CONFIG_PATH"/.theme/"${file##/*/}"
-    done
 
     print_confirm "All done!!"
 }
 
 
 PRINTER=$(cat <<-END
-[include printer_base.cfg]
-[include variables.cfg]
+[include _$hostname.cfg]
+[include _variables.cfg]
 
 [gcode_macro VARS]
 gcode:
@@ -127,7 +115,7 @@ END
 
 )
 MOONRAKER=$(cat <<-END
-[include moonraker_base.conf]
+[include _$hostname.conf]
 
 END
 
