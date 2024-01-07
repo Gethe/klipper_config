@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-hostname=$(hostname -s)
-REPO_DIR="custom_config"
-
 # Force script to exit if an error occurs
 set -e
 
@@ -22,34 +19,40 @@ sudo apt update && sudo apt full-upgrade -y
 sudo apt install git -y
 
 
-KIAUH_SRCDIR="${HOME}/kiauh"
-if [ ! -d "${KIAUH_SRCDIR}" ] ; then
+CONFIG_DIR_NAME="custom_config"
+# Where repository config files will go (read-only and keep untouched)
+CONFIG_DIR="${HOME}/$CONFIG_DIR_NAME"
+# Where the user accessable config is located (ie. the one used by Klipper to work)
+USER_DIR="${HOME}/printer_data/config"
+
+
+KIAUH_DIR="${HOME}/kiauh"
+if [ ! -d "${KIAUH_DIR}" ] ; then
     cd ~ && git clone https://github.com/dw-0/kiauh.git
 fi
-
-if [ ! -d "${REPO_CONFIG_PATH}" ] ; then
-    git clone git@github.com:Gethe/klipper_config.git "$REPO_DIR"
-fi
-
-
-source "$REPO_CONFIG_PATH"/common/scripts/utils.sh
-
 # shellcheck source=../kiauh/scripts/backup.sh
-source "$KIAUH_SRCDIR"/scripts/backup.sh
+source "$KIAUH_DIR"/scripts/backup.sh
 # shellcheck source=../kiauh/scripts/klipper.sh
-source "$KIAUH_SRCDIR"/scripts/klipper.sh
+source "$KIAUH_DIR"/scripts/klipper.sh
 # shellcheck source=../kiauh/scripts/mainsail.sh
-source "$KIAUH_SRCDIR"/scripts/mainsail.sh
+source "$KIAUH_DIR"/scripts/mainsail.sh
 # shellcheck source=../kiauh/scripts/moonraker.sh
-source "$KIAUH_SRCDIR"/scripts/moonraker.sh
+source "$KIAUH_DIR"/scripts/moonraker.sh
 # shellcheck source=../kiauh/scripts/nginx.sh
-source "$KIAUH_SRCDIR"/scripts/nginx.sh
+source "$KIAUH_DIR"/scripts/nginx.sh
 
+
+if [ ! -d "${CONFIG_DIR}" ] ; then
+    git clone git@github.com:Gethe/klipper_config.git "$CONFIG_DIR_NAME"
+fi
+source "$CONFIG_DIR"/common/scripts/utils.sh
+source "$CONFIG_DIR"/common/scripts/globals.sh
+set_globals
 
 status_msg "Installing git hooks"
-if [[ ! -e "$REPO_CONFIG_PATH"/.git/hooks/post-merge ]]; then
-    ln -sf "$REPO_CONFIG_PATH"/common/scripts/update.sh "$REPO_CONFIG_PATH"/.git/hooks/post-merge
-    sudo chmod +x "$REPO_CONFIG_PATH"/.git/hooks/post-merge
+if [[ ! -e "$CONFIG_DIR"/.git/hooks/post-merge ]]; then
+    ln -sf "$CONFIG_DIR"/common/scripts/update.sh "$CONFIG_DIR"/.git/hooks/post-merge
+    sudo chmod +x "$CONFIG_DIR"/.git/hooks/post-merge
 fi
 
 
@@ -64,30 +67,30 @@ install_firmware() {
     install_mainsail
 }
 install_printer_config() {
-    status_msg "Installing printer configuration for $hostname"
+    status_msg "Installing printer configuration for $HOSTNAME"
 
-    rm -f "$USER_CONFIG_PATH"/printer.cfg
-    rm -f "$USER_CONFIG_PATH"/moonraker.conf
+    rm -f "$USER_DIR"/printer.cfg
+    rm -f "$USER_DIR"/moonraker.conf
 
-    ln -sf "$REPO_CONFIG_PATH"/common "$USER_CONFIG_PATH"/common
+    ln -sf "$CONFIG_DIR"/common "$USER_DIR"/common
 
-    ln -sf "$REPO_CONFIG_PATH/$hostname"/moonraker.conf "$USER_CONFIG_PATH"/_"$hostname".conf
-    ln -sf "$REPO_CONFIG_PATH/$hostname"/printer.cfg "$USER_CONFIG_PATH"/_"$hostname".cfg
-    ln -sf "$REPO_CONFIG_PATH/$hostname"/variables.cfg "$USER_CONFIG_PATH"/_variables.cfg
+    ln -sf "$CONFIG_DIR/$HOSTNAME"/moonraker.conf "$USER_DIR"/_"$HOSTNAME".conf
+    ln -sf "$CONFIG_DIR/$HOSTNAME"/printer.cfg "$USER_DIR"/_"$HOSTNAME".cfg
+    ln -sf "$CONFIG_DIR/$HOSTNAME"/variables.cfg "$USER_DIR"/_variables.cfg
 
-    for file in "$REPO_CONFIG_PATH"/.theme/* "$REPO_CONFIG_PATH"/"$hostname"/.theme/*; do
-        ln -sf "$file" "$USER_CONFIG_PATH"/.theme/"${file##/*/}"
+    for file in "$CONFIG_DIR"/.theme/* "$CONFIG_DIR"/"$HOSTNAME"/.theme/*; do
+        ln -sf "$file" "$USER_DIR"/.theme/"${file##/*/}"
     done
 
-    echo "$PRINTER" >"$USER_CONFIG_PATH"/printer.cfg
-    echo "$MOONRAKER" >"$USER_CONFIG_PATH"/moonraker.conf
+    echo "$PRINTER" >"$USER_DIR"/printer.cfg
+    echo "$MOONRAKER" >"$USER_DIR"/moonraker.conf
 
     print_confirm "All done!!"
 }
 
 
 PRINTER=$(cat <<-END
-[include _$hostname.cfg]
+[include _$HOSTNAME.cfg]
 [include _variables.cfg]
 
 [gcode_macro VARS]
@@ -115,7 +118,7 @@ END
 
 )
 MOONRAKER=$(cat <<-END
-[include _$hostname.conf]
+[include _$HOSTNAME.conf]
 
 END
 
@@ -124,4 +127,4 @@ END
 
 install_firmware
 install_printer_config
-source "$REPO_CONFIG_PATH"/common/scripts/flash.sh
+source "$CONFIG_DIR"/common/scripts/flash.sh
