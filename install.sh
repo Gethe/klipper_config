@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Set x for debug
+if [[ ${DEBUG} -eq 0 ]]; then
+    set -x
+fi
+
 # Force script to exit if an error occurs
 set -e
 
@@ -14,46 +19,49 @@ if [[ ${EUID} -eq 0 ]]; then
     exit 1
 fi
 
-
-sudo apt update && sudo apt full-upgrade -y
-sudo apt install git -y
-
-
-CONFIG_DIR_NAME="custom_config"
-# Where repository config files will go (read-only and keep untouched)
-CONFIG_DIR="${HOME}/$CONFIG_DIR_NAME"
-# Where the user accessable config is located (ie. the one used by Klipper to work)
-USER_DIR="${HOME}/printer_data/config"
+update() {
+    sudo apt update && sudo apt full-upgrade -y
+    sudo apt install -y git figlet </dev/null
+}
 
 
-KIAUH_DIR="${HOME}/kiauh"
-if [ ! -d "${KIAUH_DIR}" ] ; then
-    cd ~ && git clone https://github.com/dw-0/kiauh.git
-fi
-# shellcheck source=../kiauh/scripts/backup.sh
-source "$KIAUH_DIR"/scripts/backup.sh
-# shellcheck source=../kiauh/scripts/klipper.sh
-source "$KIAUH_DIR"/scripts/klipper.sh
-# shellcheck source=../kiauh/scripts/mainsail.sh
-source "$KIAUH_DIR"/scripts/mainsail.sh
-# shellcheck source=../kiauh/scripts/moonraker.sh
-source "$KIAUH_DIR"/scripts/moonraker.sh
-# shellcheck source=../kiauh/scripts/nginx.sh
-source "$KIAUH_DIR"/scripts/nginx.sh
+KIAUH_SRCDIR="${HOME}/kiauh"
+clone_kiauh() {
+    if [ ! -d "${KIAUH_SRCDIR}" ] ; then
+        cd ~ && git clone https://github.com/dw-0/kiauh.git
+    else
+        git -C "$KIAUH_SRCDIR" pull
+    fi
+    # shellcheck source=../kiauh/scripts/backup.sh
+    source "$KIAUH_SRCDIR"/scripts/backup.sh
+    # shellcheck source=../kiauh/scripts/klipper.sh
+    source "$KIAUH_SRCDIR"/scripts/klipper.sh
+    # shellcheck source=../kiauh/scripts/mainsail.sh
+    source "$KIAUH_SRCDIR"/scripts/mainsail.sh
+    # shellcheck source=../kiauh/scripts/moonraker.sh
+    source "$KIAUH_SRCDIR"/scripts/moonraker.sh
+    # shellcheck source=../kiauh/scripts/nginx.sh
+    source "$KIAUH_SRCDIR"/scripts/nginx.sh
+}
 
 
-if [ ! -d "${CONFIG_DIR}" ] ; then
-    git clone git@github.com:Gethe/klipper_config.git "$CONFIG_DIR_NAME"
-fi
-source "$CONFIG_DIR"/common/scripts/utils.sh
-source "$CONFIG_DIR"/common/scripts/globals.sh
-set_globals
+CONFIG_DIR="${HOME}/custom_config"
+clone_config() {
+    if [ ! -d "${CONFIG_DIR}" ] ; then
+        git clone git@github.com:Gethe/klipper_config.git custom_config
+    else
+        git -C "$CONFIG_DIR" pull
+    fi
+    source "$CONFIG_DIR"/common/scripts/utils.sh
+    source "$CONFIG_DIR"/common/scripts/globals.sh
+    set_globals
 
-status_msg "Installing git hooks"
-if [[ ! -e "$CONFIG_DIR"/.git/hooks/post-merge ]]; then
-    ln -sf "$CONFIG_DIR"/common/scripts/update.sh "$CONFIG_DIR"/.git/hooks/post-merge
-    sudo chmod +x "$CONFIG_DIR"/.git/hooks/post-merge
-fi
+    status_msg "Installing git hooks"
+    if [[ ! -e "$CONFIG_DIR"/.git/hooks/post-merge ]]; then
+        ln -sf "$CONFIG_DIR"/common/scripts/update.sh "$CONFIG_DIR"/.git/hooks/post-merge
+        sudo chmod +x "$CONFIG_DIR"/.git/hooks/post-merge
+    fi
+}
 
 
 install_firmware() {
@@ -78,14 +86,45 @@ install_printer_config() {
     ln -sf "$CONFIG_DIR/$HOSTNAME"/printer.cfg "$USER_DIR"/_"$HOSTNAME".cfg
     ln -sf "$CONFIG_DIR/$HOSTNAME"/variables.cfg "$USER_DIR"/_variables.cfg
 
+    mkdir "$USER_DIR"/.theme
     for file in "$CONFIG_DIR"/.theme/* "$CONFIG_DIR"/"$HOSTNAME"/.theme/*; do
         ln -sf "$file" "$USER_DIR"/.theme/"${file##/*/}"
     done
 
     echo "$PRINTER" >"$USER_DIR"/printer.cfg
     echo "$MOONRAKER" >"$USER_DIR"/moonraker.conf
+}
+install_motd() {
+    status_msg "Installing MOTD files"
 
-    print_confirm "All done!!"
+    ## Backup existing /etc/ssh/sshd_config
+    if [ -f /etc/ssh/sshd_config ]; then
+        sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.1
+    fi
+
+    # Disable standard LastLog info
+    # There is a bug with `sed -i` that is causing permissions issues, so we are
+    # doing it the long way
+    sed '/PrintLastLog/cPrintLastLog no' /etc/ssh/sshd_config >tmp
+    sudo mv -f tmp /etc/ssh/sshd_config
+    chmod 0644 /etc/ssh/sshd_config
+
+    # Disable default static MoTD
+    do_action_service disable motd
+    sudo rm -rf /etc/motd
+
+    # Disable default dynamic MoTD
+    sudo rm -rf /etc/update-motd.d
+
+    sudo mkdir /etc/update-motd.d
+    sudo cp -r "$CONFIG_DIR"/motd/* /etc/update-motd.d/
+
+    sudo mkdir /etc/update-motd.d/logo
+    sudo cp "$CONFIG_DIR"/"$HOSTNAME"/motd/logo /etc/update-motd.d/logo/logo
+
+    sudo chmod a+x /etc/update-motd.d/*
+
+    do_action_service restart sshd
 }
 
 
@@ -115,16 +154,21 @@ gcode:
 #*# position_endstop = 116.575
 
 END
-
 )
 MOONRAKER=$(cat <<-END
 [include _$HOSTNAME.conf]
 
 END
-
 )
 
 
+update
+clone_kiauh
+clone_config
+
 install_firmware
 install_printer_config
-source "$CONFIG_DIR"/common/scripts/flash.sh
+install_motd
+#source "$CONFIG_DIR"/common/scripts/flash.sh
+
+print_confirm "All done!!"

@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+
+service_up=$(echo -en "\e[92m")
+service_down=$(echo -en "\e[91m")
+
+label=$(echo -en "\e[39m")
+bullet=$(echo -en "\e[38;5;244m")
+arrow=$(echo -en "\e[39m")
+desc=$(echo -en "\e[38;5;244m")
+clear=$(echo -en "\e[0m")
+
+# Logic for switching theme accent colors depending on user choice
+case ${HOSTNAME} in
+    "ruby")
+        value=$(echo -en "\e[38;5;88m")
+        ;;
+    "bubbles")
+        value=$(echo -en "\e[38;5;219m")
+        ;;
+    "slate")
+        value=$(echo -en "\e[38;5;33m")
+        ;;
+    *)
+        value=$(echo -en "\e[39m")
+        ;;
+esac
+
+SERVICES=("klipper" "moonraker" "crowsnest" "KlipperScreen")
+SERVICES_COLUMNS=4
+
+# get host information
+ETH_IP=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+WLAN_IP=$(/sbin/ip -o -4 addr list wlan0 | awk '{print $4}' | cut -d/ -f1)
+HOST_IP=""
+# get load averages
+IFS=" " read -r LOAD1 LOAD5 LOAD15 <<<"$(awk '{ print $1,$2,$3 }' /proc/loadavg)"
+# get free memory
+IFS=" " read -r USED AVAIL TOTAL <<<"$(free -htm | grep "Mem" | awk '{print $3,$7,$2}')"
+# get processes
+PROCESS=$(ps -eo user=|sort|uniq -c | awk '{ print $2 " " $1 }')
+PROCESS_ALL=$(echo "$PROCESS"| awk '{print $2}' | awk '{ SUM += $1} END { print SUM }')
+PROCESS_ROOT=$(echo "$PROCESS"| grep root | awk '{print $2}')
+PROCESS_USER=$(echo "$PROCESS"| grep -v root | awk '{print $2}' | awk '{ SUM += $1} END { print SUM }')
+# get processors
+PROCESSOR_COUNT=$(grep -ioP 'processor\t:' /proc/cpuinfo | wc -l)
+# get disk usage
+ROOT_USAGE=$(df -h / | awk '/\// {print $(NF-1)}' | sed 's/%//g')
+ROOT_USAGE_GB=$(df -h / | awk '/\// {print $(NF-3)}')
+ROOT_TOTAL=$(df -h / | awk '/\// {print $(NF-4)}')
+# login info
+LASTLOG_DATETIME=$(lastlog | awk '/pi/ {printf("%s-%s-%s, %s", $6, $5, $9, $7)}')
+LASTLOG_IP=$(lastlog | awk '/pi/ {print($3)}')
+# available updates
+#UPDATES_COUNT=$(apt list --upgradable 2> /dev/null | grep -c upgradable)
+# cpu temp
+CPU_TEMP=$(/usr/bin/vcgencmd measure_temp | cut -c "6-9")
+
+#STATUSES=""
+
+# loop through services list and set color for their status icon
+for key in "${!SERVICES[@]}"; do
+    if [[ $(systemctl list-unit-files "${SERVICES[${key}]}*" | wc -l) -gt 3 ]]; then
+        status=$(systemctl show -p ActiveState --value "${SERVICES[${key}]}")
+        icon=""
+        if [ "$status" == "active" ]; then
+            icon="${service_up}▲${clear}"
+        else
+            icon="${service_down}▼${clear}"
+        fi
+
+        STATUSES+="  ${icon} ${SERVICES[${key}]}${clear}"
+        if [ $((( key + 1 ) % SERVICES_COLUMNS)) -eq 0 ]; then
+            STATUSES+="\n"
+        fi
+    fi
+done
+STATUSES+="\n"
+
+if [ -n "$ETH_IP" ]; then
+  HOST_IP+="$value${ETH_IP}$desc (lan)"
+fi
+
+if [ -n "$WLAN_IP" ]; then
+    if [ -n "$ETH_IP" ]; then
+      HOST_IP+="$desc and "
+    fi
+  HOST_IP+="$value${WLAN_IP}$desc (wifi)"
+fi
+
+MESSAGES="
+$(figlet -c -w 50 "${HOSTNAME}")
+$label  Hostname$bullet....$arrow› $value$(hostname)
+$label  IP addr$bullet.....$arrow› $HOST_IP
+$label  Distro$bullet......$arrow› $value$(grep "PRETTY_NAME" /etc/os-release | cut -d "=" -f 2- | sed 's/"//g')
+$label  Kernel$bullet......$arrow› $value$(uname -sr)
+$label  Uptime$bullet......$arrow› $value$(uptime -p)
+
+$label  Load$bullet........$arrow› $value$LOAD1$desc (1m), $value$LOAD5$desc (5m), $value$LOAD15$desc (15m)
+$label  Processes$bullet...$arrow› $value$PROCESS_ROOT$desc (root), $value$PROCESS_USER$desc (user), $value$PROCESS_ALL$desc (total)
+$label  CPU$bullet.........$arrow› $value$PROCESSOR_COUNT$desc vCPU
+$label  Memory$bullet......$arrow› $value$USED$desc used, $value$AVAIL$desc avail, $value$TOTAL$desc total
+$label  Disk$bullet........$arrow› $value$ROOT_USAGE%$desc ($ROOT_USAGE_GB of $ROOT_TOTAL)
+$label  Temp$bullet........$arrow› $value$CPU_TEMP$descºC
+
+$label  Updates$bullet.....$arrow› $value$UPDATES_COUNT$desc available
+$label  Last login$bullet..$arrow› $value$LASTLOG_DATETIME$desc from $value$LASTLOG_IP
+
+$label  Services\n $STATUSES
+"
+
+paste /etc/update-motd.d/logo/logo <( echo -e "${MESSAGES}")

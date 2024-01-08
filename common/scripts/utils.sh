@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
 
 # shellcheck source=../kiauh/scripts/utilities.sh
-source "$KIAUH_DIR"/scripts/utilities.sh
+source ~/kiauh/scripts/utilities.sh
 # shellcheck source=../kiauh/scripts/ui/general_ui.sh
-source "$KIAUH_DIR"/scripts/ui/general_ui.sh
-
-copy_function() {
-  test -n "$(declare -f "$1")" || return
-  eval "${_/$1/$2}"
-}
+source ~/kiauh/scripts/ui/general_ui.sh
 
 rename_function() {
-  copy_function "$@" || return
-  unset -f "$1"
+    local ORIG_FUNC
+    ORIG_FUNC=$(declare -f "$1")
+    local NEWNAME_FUNC="$2${ORIG_FUNC#"$1"}"
+    eval "$NEWNAME_FUNC"
 }
