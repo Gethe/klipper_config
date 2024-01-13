@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Set x for debug
-if [[ ${DEBUG} -eq 0 ]]; then
+if [[ ${DEBUG} -eq 1 ]]; then
     set -x
 fi
 
