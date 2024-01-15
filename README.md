@@ -75,10 +75,10 @@ wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh
 
 ## Credits
 
-A lot of inspiration outside of my own has gone into this config, and it would
-be remiss of me to not place credit where it is due.
+A lot of inspiration outside of my own has gone into this config, and I would be
+remiss to not place credit where it is due.
 
-Projects that are used directly by this config include:
+Projects that are explicit dependencies of this config include:
 
 * [kiauh](https://github.com/dw-0/kiauh)
 * [klippain-shaketune](https://github.com/Frix-x/klippain-shaketune)
@@ -92,8 +92,10 @@ work from:
 * [RatOS Config](https://github.com/Rat-OS/RatOS-configuration)
 * [klippain](https://github.com/Frix-x/klippain)
 * [klipper-motd](https://github.com/tomaski/klipper-motd)
+* nachoparker - [Customize your MOTD]
 * Drachenkatze - [Automating Klipper MCU Updates](https://docs.vorondesign.com/community/howto/drachenkatze/automating_klipper_mcu_updates.html)
 
 
 [Raspberry Pi OS Lite]: (https://www.raspberrypi.com/software/)
 [backup image]: (https://www.tomshardware.com/how-to/back-up-raspberry-pi-as-disk-image)
+[Customize your MOTD]: (https://web.archive.org/web/20180729211018/https://ownyourbits.com/2017/04/05/customize-your-motd-login-message-in-debian-and-ubuntu/)
