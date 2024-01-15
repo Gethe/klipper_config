@@ -87,7 +87,7 @@ Projects that are explicit dependencies of this config include:
 * [Mainsail](https://github.com/mainsail-crew/mainsail)
 
 Many of the scripts, macros, and config files included in this repo are based on
-work from:
+or inspired by work from:
 
 * [RatOS Config](https://github.com/Rat-OS/RatOS-configuration)
 * [klippain](https://github.com/Frix-x/klippain)
