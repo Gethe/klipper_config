@@ -33,7 +33,9 @@ function install_mainsail_macros() {
     status_msg "Installing printer configuration for $HOSTNAME"
 
     ln -sf "$CONFIG_DIR"/common "$USER_DIR"/common
+    ok_msg "config files installed!"
 
+    status_msg "Installing Mainsail theme for $HOSTNAME"
     mkdir "$USER_DIR"/.theme
     for file in "$CONFIG_DIR"/.theme/* "$CONFIG_DIR"/"$HOSTNAME"/.theme/*; do
         ln -sf "$file" "$USER_DIR"/.theme/"${file##/*/}"
@@ -65,10 +67,9 @@ function install_mainsail_macros() {
     sudo cp "$CONFIG_DIR"/"$HOSTNAME"/motd/logo /etc/update-motd.d/logo/logo
 
     sudo chmod a+x /etc/update-motd.d/*
+    ok_msg "Theme installation complete!"
 
     do_action_service restart sshd
-
-    ok_msg "config files installed!"
 }
 function patch_mainsail_update_manager() {
     true;
