@@ -9,8 +9,93 @@ set -e
 source ~/kiauh/scripts/globals.sh
 
 # KIAUH overrides #
+
+# Install our files instead of stock
+function write_example_printer_cfg() {
+    status_msg "Creating printer.cfg in ${USER_DIR} ..."
+
+    ln -sf "$CONFIG_DIR/$HOSTNAME"/printer.cfg "$USER_DIR"/_"$HOSTNAME".cfg
+    ln -sf "$CONFIG_DIR/$HOSTNAME"/variables.cfg "$USER_DIR"/_variables.cfg
+
+    echo "$PRINTER" >"$USER_DIR"/printer.cfg
+
+    ok_msg "printer.cfg created!"
+}
+function create_moonraker_conf() {
+    status_msg "Creating moonraker.conf in ${USER_DIR} ..."
+
+    ln -sf "$CONFIG_DIR/$HOSTNAME"/moonraker.conf "$USER_DIR"/_"$HOSTNAME".conf
+    echo "$MOONRAKER" >"$USER_DIR"/moonraker.conf
+
+    ok_msg "moonraker.conf created!"
+}
 function install_mainsail_macros() {
-    echo "No mainsail macros"
+    status_msg "Installing printer configuration for $HOSTNAME"
+
+    ln -sf "$CONFIG_DIR"/common "$USER_DIR"/common
+
+    mkdir "$USER_DIR"/.theme
+    for file in "$CONFIG_DIR"/.theme/* "$CONFIG_DIR"/"$HOSTNAME"/.theme/*; do
+        ln -sf "$file" "$USER_DIR"/.theme/"${file##/*/}"
+    done
+
+    ## Backup existing /etc/ssh/sshd_config
+    if [ -f /etc/ssh/sshd_config ]; then
+        sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.1
+    fi
+
+    # Disable standard LastLog info
+    # There is a bug with `sed -i` that is causing permissions issues, so we are
+    # doing it the long way
+    sed '/PrintLastLog/cPrintLastLog no' /etc/ssh/sshd_config >tmp
+    sudo mv -f tmp /etc/ssh/sshd_config
+    chmod 0644 /etc/ssh/sshd_config
+
+    # Disable default static MoTD
+    do_action_service disable motd
+    sudo rm -rf /etc/motd
+
+    # Disable default dynamic MoTD
+    sudo rm -rf /etc/update-motd.d
+
+    sudo mkdir /etc/update-motd.d
+    sudo cp -r "$CONFIG_DIR"/motd/* /etc/update-motd.d/
+
+    sudo mkdir /etc/update-motd.d/logo
+    sudo cp "$CONFIG_DIR"/"$HOSTNAME"/motd/logo /etc/update-motd.d/logo/logo
+
+    sudo chmod a+x /etc/update-motd.d/*
+
+    do_action_service restart sshd
+
+    ok_msg "config files installed!"
+}
+function patch_mainsail_update_manager() {
+    true;
+}
+
+# Always add user to identified groups
+function check_usergroups() {
+  local group_dialout group_tty
+
+  if grep -q "dialout" </etc/group && ! grep -q "dialout" <(groups "${USER}"); then
+    group_dialout="false"
+  fi
+
+  if grep -q "tty" </etc/group && ! grep -q "tty" <(groups "${USER}"); then
+    group_tty="false"
+  fi
+
+  if [[ ${group_dialout} == "false" || ${group_tty} == "false" ]] ; then
+    status_msg "Adding user '${USER}' to group(s) ..."
+    if [[ ${group_tty} == "false" ]]; then
+        sudo usermod -a -G tty "${USER}" && ok_msg "Group 'tty' assigned!"
+    fi
+    if [[ ${group_dialout} == "false" ]]; then
+        sudo usermod -a -G dialout "${USER}" && ok_msg "Group 'dialout' assigned!"
+    fi
+    ok_msg "Remember to relog/restart this machine for the group(s) to be applied!"
+  fi
 }
 
 rename_function set_globals base_set_globals

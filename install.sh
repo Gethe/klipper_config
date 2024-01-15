@@ -44,6 +44,11 @@ clone_kiauh() {
     source "$KIAUH_SRCDIR"/scripts/nginx.sh
 }
 
+cat >> ~/.ssh/config << "END"
+Host github.com
+   StrictHostKeyChecking accept-new
+
+END
 
 CONFIG_DIR="${HOME}/custom_config"
 clone_config() {
@@ -65,7 +70,7 @@ clone_config() {
 
 
 install_firmware() {
-    status_msg "Installing printer firmware"
+   status_msg "Installing printer firmware"
 
     set_custom_klipper_repo DangerKlippers/danger-klipper master
     run_klipper_setup 3 "printer"
@@ -73,68 +78,6 @@ install_firmware() {
     moonraker_setup 1
 
     install_mainsail
-}
-install_printer_config() {
-    echo "config 0"
-    status_msg "Installing printer configuration for $HOSTNAME"
-
-    rm -f "$USER_DIR"/printer.cfg
-    rm -f "$USER_DIR"/moonraker.conf
-
-    echo "config 1"
-    ln -sf "$CONFIG_DIR"/common "$USER_DIR"/common
-
-    ln -sf "$CONFIG_DIR/$HOSTNAME"/moonraker.conf "$USER_DIR"/_"$HOSTNAME".conf
-    ln -sf "$CONFIG_DIR/$HOSTNAME"/printer.cfg "$USER_DIR"/_"$HOSTNAME".cfg
-    ln -sf "$CONFIG_DIR/$HOSTNAME"/variables.cfg "$USER_DIR"/_variables.cfg
-
-    echo "config 2"
-    mkdir "$USER_DIR"/.theme
-    for file in "$CONFIG_DIR"/.theme/* "$CONFIG_DIR"/"$HOSTNAME"/.theme/*; do
-        ln -sf "$file" "$USER_DIR"/.theme/"${file##/*/}"
-    done
-    echo "config 3"
-
-    echo "$PRINTER" >"$USER_DIR"/printer.cfg
-    echo "$MOONRAKER" >"$USER_DIR"/moonraker.conf
-    echo "config 4"
-}
-install_motd() {
-    echo "motd 0"
-    status_msg "Installing MOTD files"
-
-    ## Backup existing /etc/ssh/sshd_config
-    if [ -f /etc/ssh/sshd_config ]; then
-        sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.1
-    fi
-    echo "motd 1"
-
-    # Disable standard LastLog info
-    # There is a bug with `sed -i` that is causing permissions issues, so we are
-    # doing it the long way
-    sed '/PrintLastLog/cPrintLastLog no' /etc/ssh/sshd_config >tmp
-    sudo mv -f tmp /etc/ssh/sshd_config
-    chmod 0644 /etc/ssh/sshd_config
-
-    # Disable default static MoTD
-    do_action_service disable motd
-    sudo rm -rf /etc/motd
-    echo "motd 2"
-
-    # Disable default dynamic MoTD
-    sudo rm -rf /etc/update-motd.d
-
-    sudo mkdir /etc/update-motd.d
-    sudo cp -r "$CONFIG_DIR"/motd/* /etc/update-motd.d/
-    echo "motd 3"
-
-    sudo mkdir /etc/update-motd.d/logo
-    sudo cp "$CONFIG_DIR"/"$HOSTNAME"/motd/logo /etc/update-motd.d/logo/logo
-
-    sudo chmod a+x /etc/update-motd.d/*
-
-    do_action_service restart sshd
-    echo "motd 4"
 }
 
 
@@ -176,12 +119,7 @@ update
 clone_kiauh
 clone_config
 
-echo "install_firmware"
 install_firmware
-echo "install_printer_config"
-install_printer_config
-echo "install_motd"
-install_motd
 #source "$CONFIG_DIR"/common/scripts/flash.sh
 
 print_confirm "All done!!"
