@@ -3,7 +3,7 @@
 This is my custom configuration for the Klipper firmware. It is designed to be
 easy to set up, and highly modular.
 
-## :warning: Note :warning:
+### :warning: Usage of this config is at your own risk :warning:
 
 This config is tailored to my own printers with the specific idiosyncrasies and
 mods they have. As such, it may not work well for other printers without
@@ -13,7 +13,6 @@ I also run [Danger Klipper](https://github.com/DangerKlippers/danger-klipper) on
 my printers, so there are options here that won't be compatible with mainline
 Klipper.
 
-### Usage of this config is at your own risk
 
 ## Details
 
@@ -35,7 +34,7 @@ Once installed, these files will be found at `~/printer_data/config/common`.
 In a separate directory, with the same name as your pi's hostname (eg. ruby),
 are the files that define a specific printer. This includes another pair of
 printer/moonraker files with `[include]`s to the respective files in
-[common](common/), as well as the hardware that it uses. Also available here is
+[common](common/) for the various hardware that it uses. Also available here is
 another variables.cfg for printer specific overrides.
 
 This line can be used to change the hostname if needed.
@@ -46,18 +45,19 @@ sudo hostnamectl set-hostname $new_hostname
 Once installed, these files will be found at `~/printer_data/config` as eg.
 _ruby.conf, _ruby.cfg, and _variables.cfg
 
-
 ### User
 
 All files in this repo will be symlinked into `~/printer_data/config`, and as
 such will not be editable. The only files editable from the Mainsail interface
 will be new printer.cfg and moonraker.conf files that are created during
 installation. These are created with just an `[include]` to their respective
-host files.
+host files and a boilerplate SAVE_CONFIG section to ensure the command works out
+of the box.
 
 The intent is that this is where on-the-fly tweaks happen in order to tune the
 printer. Once it settles in, those changes should be moved to the host files in
-the repo leaving the editable files mostly blank.
+the repo leaving the editable files mostly empty.
+
 
 ## Installation
 
@@ -72,6 +72,7 @@ required components.
 ``` bash
 wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh | bash
 ```
+
 
 ## Credits
 
