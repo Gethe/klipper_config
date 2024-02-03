@@ -77,13 +77,12 @@ install_firmware() {
 
     moonraker_setup 1
 
-    install_mainsail
-
     "$USER_DIR"/"$HOSTNAME"/flash_mcu.sh
-
     if [[ -z ${klipper_screen[$HOSTNAME]} ]]; then
         install_klipperscreen
     fi
+
+    install_mainsail
 }
 
 
@@ -126,6 +125,5 @@ clone_kiauh
 clone_config
 
 install_firmware
-#source "$CONFIG_DIR"/common/scripts/flash.sh
 
 print_confirm "All done!!"
