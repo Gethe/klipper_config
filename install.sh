@@ -68,7 +68,7 @@ clone_config() {
     fi
 }
 
-
+klipper_screen=( ruby )
 install_firmware() {
    status_msg "Installing printer firmware"
 
@@ -78,6 +78,10 @@ install_firmware() {
     moonraker_setup 1
 
     install_mainsail
+
+    if [[ -z ${klipper_screen[$HOSTNAME]} ]]; then
+        install_klipperscreen
+    fi
 }
 
 

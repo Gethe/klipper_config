@@ -74,6 +74,9 @@ function install_mainsail_macros() {
 function patch_mainsail_update_manager() {
     true;
 }
+function patch_klipperscreen_update_manager() {
+    true;
+}
 
 # Always add user to identified groups
 function check_usergroups() {
