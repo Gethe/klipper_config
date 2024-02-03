@@ -79,6 +79,8 @@ install_firmware() {
 
     install_mainsail
 
+    "$USER_DIR"/"$HOSTNAME"/flash_mcu.sh
+
     if [[ -z ${klipper_screen[$HOSTNAME]} ]]; then
         install_klipperscreen
     fi

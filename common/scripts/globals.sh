@@ -32,6 +32,7 @@ function create_moonraker_conf() {
 function install_mainsail_macros() {
     status_msg "Installing printer configuration for $HOSTNAME"
 
+    ln -sf "$CONFIG_DIR"/common/boards/*/*.rules /etc/udev/rules.d/
     ln -sf "$CONFIG_DIR"/common "$USER_DIR"/common
     ok_msg "config files installed!"
 
