@@ -5,8 +5,6 @@ source "$HOME"/custom_config/common/scripts/header.sh
 
 status_msg "Applying config updates..."
 
-sudo cp -r "$CONFIG_DIR"/motd/* /etc/update-motd.d/
-sudo cp "$CONFIG_DIR"/"$HOSTNAME"/motd/logo /etc/update-motd.d/logo/logo
-sudo chmod a+x /etc/update-motd.d/*
+find "$CONFIG_DIR"/ -type f -iname "*.sh" -exec chmod +x {} \;
 
 ok_msg "Finished updates!"

@@ -57,6 +57,10 @@ clone_config() {
     else
         git -C "$CONFIG_DIR" pull
     fi
+
+    # Make all script files executable
+    find "$CONFIG_DIR"/ -type f -iname "*.sh" -exec chmod +x {} \;
+
     source "$CONFIG_DIR"/common/scripts/utils.sh
     source "$CONFIG_DIR"/common/scripts/globals.sh
     set_globals
@@ -79,7 +83,7 @@ install_firmware() {
 
     wget -O - https://raw.githubusercontent.com/Frix-x/klippain-shaketune/main/install.sh | bash
 
-    "$USER_DIR"/"$HOSTNAME"/flash_mcu.sh
+    "$CONFIG_DIR"/"$HOSTNAME"/flash_mcu.sh
     if [[ -z ${klipper_screen[$HOSTNAME]} ]]; then
         install_klipperscreen
     fi
