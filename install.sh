@@ -75,9 +75,9 @@ install_firmware() {
     set_custom_klipper_repo DangerKlippers/danger-klipper master
     run_klipper_setup 3 "printer"
 
-    wget -O - https://raw.githubusercontent.com/Frix-x/klippain-shaketune/main/install.sh | bash
-
     moonraker_setup 1
+
+    wget -O - https://raw.githubusercontent.com/Frix-x/klippain-shaketune/main/install.sh | bash
 
     "$USER_DIR"/"$HOSTNAME"/flash_mcu.sh
     if [[ -z ${klipper_screen[$HOSTNAME]} ]]; then
