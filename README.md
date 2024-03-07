@@ -1,12 +1,14 @@
 # Custom Klipper Configuration
 
 This is my custom configuration for the Klipper firmware. It is designed to be
-easy to set up, and highly modular.
+easy to set up, and highly modular. I made this primarily to make it easier to
+share macros and other settings between printers, as well as to provide a config
+backup in case anything unfortunate happens.
 
 ### :warning: Usage of this config is at your own risk :warning:
 
 This config is tailored to my own printers with the specific idiosyncrasies and
-mods they have. As such, it may not work well for other printers without
+mods that they have. As such, it may not work well for other printers without
 significant changes.
 
 I also run [Danger Klipper](https://github.com/DangerKlippers/danger-klipper) on
@@ -84,12 +86,14 @@ These files will be symlinked to `~/printer_data/config/common`.
 A lot of inspiration outside of my own has gone into this config, and I would be
 remiss to not place credit where it is due.
 
-Projects that are explicit dependencies of this config include:
+Projects that are directly installed and used for at least one printer config
+include:
 
 * [kiauh](https://github.com/dw-0/kiauh)
 * [klippain-shaketune](https://github.com/Frix-x/klippain-shaketune)
 * [Moonraker](https://github.com/Arksine/moonraker)
 * [Danger Klipper](https://github.com/DangerKlippers/danger-klipper)
+* [KlipperScreen](https://github.com/KlipperScreen/KlipperScreen)
 * [Mainsail](https://github.com/mainsail-crew/mainsail)
 
 Many of the scripts, macros, and config files included in this repo are based on
