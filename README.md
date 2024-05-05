@@ -26,7 +26,6 @@ required components.
 wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh | bash
 ```
 
-
 ## Details
 
 All files in this repo will be symlinked into `~/printer_data/config`. This
@@ -48,6 +47,7 @@ The hosts' `hostname` is used in various ways to define a specific printer, so
 it's important to have a unique `hostname` for each printer using this config.
 
 This line can be used to change the hostname if needed.
+
 ``` bash
 sudo hostnamectl set-hostname $new_hostname
 ```
@@ -75,7 +75,6 @@ Like many generalist configs these days, this one makes significant use of a
 defaults for all defined user vars, along with any necessary documentation.
 
 These files will be symlinked to `~/printer_data/config/common`.
-
 
 ## Credits
 
