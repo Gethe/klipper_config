@@ -1,0 +1,4 @@
+# BTT SKR Mini E3 V2.0
+SUBSYSTEMS=="usb", ATTRS{idProduct}=="614e",  ATTRS{idVendor}=="1d50", ATTRS{serial}=="btt-skr-mini-e3-20", ACTION=="add", SYMLINK+="btt-skr-mini-e3-20"
+
+ACTION=="remove", ENV{DEVLINKS}=="/dev/btt-skr-mini-e3-20"
