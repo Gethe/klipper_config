@@ -47,7 +47,7 @@ clone_kiauh() {
 CONFIG_DIR="${HOME}/custom_config"
 clone_config() {
     if [ ! -d "${CONFIG_DIR}" ] ; then
-        git clone git@github.com:Gethe/klipper_config.git custom_config
+        git clone https://github.com/Gethe/klipper_config.git custom_config
     else
         git -C "$CONFIG_DIR" pull
     fi
@@ -75,7 +75,7 @@ install_firmware() {
 
     moonraker_setup 1
 
-    wget -O - https://raw.githubusercontent.com/Frix-x/klippain-shaketune/main/install.sh | bash
+    # wget -O - https://raw.githubusercontent.com/Frix-x/klippain-shaketune/main/install.sh | bash
 
     "$CONFIG_DIR"/"$HOSTNAME"/flash_mcu.sh
     if [[ -z ${klipper_screen[$HOSTNAME]} ]]; then
