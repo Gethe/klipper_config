@@ -44,12 +44,6 @@ clone_kiauh() {
     source "$KIAUH_SRCDIR"/scripts/nginx.sh
 }
 
-cat >> ~/.ssh/config << "END"
-Host github.com
-   StrictHostKeyChecking accept-new
-
-END
-
 CONFIG_DIR="${HOME}/custom_config"
 clone_config() {
     if [ ! -d "${CONFIG_DIR}" ] ; then

@@ -1,5 +1,9 @@
 # Custom Klipper Configuration
 
+> [!CAUTION]
+> This is far from complete, let alone finished. As such it has had very little
+> practical testing.
+
 This is my custom configuration for the Klipper firmware. It is designed to be
 easy to set up, and highly modular. I made this primarily to make it easier to
 share macros and other settings between printers, as well as to provide a config
