@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cp -f "$CONFIG_DIR"/common/boards/btt_octopus/firmware.config ~/klipper/.config
+cp -f ~/custom_config/common/boards/btt_octopus/firmware.config ~/klipper/.config
 
 pushd ~/klipper || exit
 make olddefconfig
