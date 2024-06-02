@@ -68,16 +68,30 @@ clone_config() {
 
 klipper_screen=( ruby )
 install_firmware() {
-   status_msg "Installing printer firmware"
+    local klipper_systemd_services
+    local moonraker_services
 
-    set_custom_klipper_repo DangerKlippers/danger-klipper master
-    run_klipper_setup 3 "printer"
+    status_msg "Installing printer firmware"
 
-    moonraker_setup 1
+    klipper_systemd_services=$(klipper_systemd)
+    if [[ -n ${klipper_systemd_services} ]]; then
+        ok_msg "Klipper already installed!"
+    else
+        set_custom_klipper_repo DangerKlippers/danger-klipper master
+        run_klipper_setup 3 "printer"
+    fi
+
+    moonraker_services=$(moonraker_systemd)
+    if [[ -n ${moonraker_services} ]]; then
+        ok_msg "Moonraker already installed!"
+    else
+        moonraker_setup 1
+    fi
 
     # wget -O - https://raw.githubusercontent.com/Frix-x/klippain-shaketune/main/install.sh | bash
 
     "$CONFIG_DIR"/"$HOSTNAME"/flash_mcu.sh
+
     if [[ -z ${klipper_screen[$HOSTNAME]} ]]; then
         install_klipperscreen
     fi
