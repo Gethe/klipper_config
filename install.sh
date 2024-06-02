@@ -54,6 +54,7 @@ clone_config() {
 
     # Make all script files executable
     find "$CONFIG_DIR"/ -type f -iname "*.sh" -exec chmod +x {} \;
+    sudo ln -sf "$CONFIG_DIR"/common/boards/*/*.rules /etc/udev/rules.d/
 
     source "$CONFIG_DIR"/common/scripts/utils.sh
     source "$CONFIG_DIR"/common/scripts/globals.sh
