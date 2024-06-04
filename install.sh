@@ -89,15 +89,15 @@ install_firmware() {
         moonraker_setup 1
     fi
 
-    # wget -O - https://raw.githubusercontent.com/Frix-x/klippain-shaketune/main/install.sh | bash
+    install_mainsail
 
-    "$CONFIG_DIR"/"$HOSTNAME"/flash_mcu.sh
+    # wget -O - https://raw.githubusercontent.com/Frix-x/klippain-shaketune/main/install.sh | bash
 
     if [[ -z ${klipper_screen[$HOSTNAME]} ]]; then
         install_klipperscreen
     fi
 
-    install_mainsail
+    "$CONFIG_DIR"/"$HOSTNAME"/flash_mcu.sh
 }
 
 
