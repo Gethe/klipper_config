@@ -34,7 +34,7 @@ wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh
 
 All files in this repo will be symlinked into `~/printer_data/config`. This
 means that they will not be editable outside of the repo directory. The intent
-is that the "User" files where on-the-fly tweaks happen in order to tune the
+is that the "User" files is where on-the-fly tweaks happen in order to tune the
 printer. Once things settle in, those changes should be moved to the "Host"
 files in the repo leaving the editable files mostly empty.
 
@@ -57,7 +57,7 @@ sudo hostnamectl set-hostname $new_hostname
 ```
 
 In the repo directory, there should be separate directory with the same name as
-your pi's hostname (eg. [<repo_dir>/ruby](ruby/)). This is where host specific
+your pi's hostname (eg. [~/custom_config/ruby](ruby/)). This is where host specific
 files are kept including our printer.cfg and moonraker.conf files. Each will
 have `[include]`s to their respective "Common" files for the various hardware
 and software that it uses. Also here is a variables.cfg for printer specific
@@ -68,7 +68,7 @@ This is also where the printer specific theme and flashing files will go.
 
 ### Common
 
-All major config files are located in [<repo_dir>/common](common/). These define
+All major config files are located in [~/custom_config/common](common/). These define
 the macros, MCUs, drivers, etc. These are generally self contained and can be
 thought of as a parts bin of sorts. Also included here are the most basic
 moonraker.conf and printer.cfg files, populated with the options that any
