@@ -46,7 +46,7 @@ clone_kiauh() {
 
 CONFIG_DIR="${HOME}/custom_config"
 clone_config() {
-    if [ ! -d "${CONFIG_DIR}" ] ; then
+    if [ ! -d "${CONFIG_DIR}" ]; then
         git clone https://github.com/Gethe/klipper_config.git custom_config
     else
         git -C "$CONFIG_DIR" pull
@@ -90,7 +90,9 @@ install_firmware() {
         moonraker_setup 1
     fi
 
-    install_mainsail
+    if [ ! -d "${MAINSAIL_DIR}" ]; then
+        install_mainsail
+    fi
 
     # wget -O - https://raw.githubusercontent.com/Frix-x/klippain-shaketune/main/install.sh | bash
 
