@@ -58,6 +58,7 @@ clone_config() {
 
     source "$CONFIG_DIR"/common/scripts/utils.sh
     source "$CONFIG_DIR"/common/scripts/globals.sh
+    source "$CONFIG_DIR"/"$HOSTNAME"/mcu.sh
     set_globals
 
     status_msg "Installing git hooks"
@@ -97,7 +98,8 @@ install_firmware() {
         install_klipperscreen
     fi
 
-    "$CONFIG_DIR"/"$HOSTNAME"/flash_mcu.sh
+    mcu_build
+    mcu_flash
 }
 
 
