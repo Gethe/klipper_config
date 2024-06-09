@@ -99,6 +99,7 @@ Many of the scripts, macros, and config files included in this repo are based on
 or inspired by work from:
 
 * [RatOS Config](https://github.com/Rat-OS/RatOS-configuration)
+* [Ellis' Guide](https://ellis3dp.com/Print-Tuning-Guide/)
 * [klippain](https://github.com/Frix-x/klippain)
 * [klipper-motd](https://github.com/tomaski/klipper-motd)
 * nachoparker - [Customize your MOTD]
