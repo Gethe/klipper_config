@@ -109,7 +109,7 @@ PRINTER=$(cat <<-END
 [include _$HOSTNAME.cfg]
 [include _variables.cfg]
 
-[gcode_macro VARS]
+[gcode_macro _USER_VARIABLES]
 gcode:
 
 #*# <---------------------- SAVE_CONFIG ---------------------->
