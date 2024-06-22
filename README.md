@@ -13,8 +13,8 @@ backup in case anything unfortunate happens.
 > Usage of this config is at your own risk.
 >
 > This config is tailored to my own printers with the specific idiosyncrasies
-> and mods that they have. One of those is [Danger Klipper], and are options in
-> use here that won't be compatible with mainline Klipper.
+> and mods that they have. One of those is [Danger-Klipper], and there are
+> options in use here that won't be compatible with mainline Klipper.
 
 ## Installation
 
@@ -91,7 +91,7 @@ include:
 * [kiauh](https://github.com/dw-0/kiauh)
 * [klippain-shaketune](https://github.com/Frix-x/klippain-shaketune)
 * [Moonraker](https://github.com/Arksine/moonraker)
-* [Danger Klipper]
+* [Danger-Klipper]
 * [KlipperScreen](https://github.com/KlipperScreen/KlipperScreen)
 * [Mainsail](https://github.com/mainsail-crew/mainsail)
 
@@ -105,7 +105,7 @@ or inspired by work from:
 * nachoparker - [Customize your MOTD]
 * Drachenkatze - [Automating Klipper MCU Updates](https://docs.vorondesign.com/community/howto/drachenkatze/automating_klipper_mcu_updates.html)
 
-[Danger Klipper]: https://github.com/DangerKlippers/danger-klipper
+[Danger-Klipper]: https://github.com/DangerKlippers/danger-klipper
 [Raspberry Pi OS Lite]: https://www.raspberrypi.com/software/
 [backup image]: https://www.tomshardware.com/how-to/back-up-raspberry-pi-as-disk-image/
 [Customize your MOTD]: https://web.archive.org/web/20180729211018/https://ownyourbits.com/2017/04/05/customize-your-motd-login-message-in-debian-and-ubuntu/
