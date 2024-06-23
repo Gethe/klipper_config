@@ -19,7 +19,7 @@ function mcu_flash() {
 
     if [[ ${isUpdate} ]]; then
         local flash_script="${KLIPPER_DIR}/scripts/flash-sdcard.sh"
-        local selected_baud_rate=250000
+        local selected_baud_rate=115200
         local device="/dev/btt-skr-mini-e3-v2"
         local selected_board="btt-skr-mini-e3-v2"
 
@@ -41,6 +41,6 @@ function mcu_flash() {
         echo "Ensure MCU is powered off and remove SD card."
         echo "Copy klipper.bin to local machine as firmware.bin."
         echo "Move firmware.bin to SD card and insert into MCU."
-        echo "Power on MCU and plug connect to Rpi."
+        echo "Power on MCU and connect to Rpi."
     fi
 }
