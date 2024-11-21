@@ -83,6 +83,39 @@ defaults for all defined user vars, along with any necessary documentation.
 
 These files will be symlinked to `~/printer_data/config/common`.
 
+Slicer Configuration
+--------------------
+
+### PrusaSlicer and derivatives ###
+
+#### Start G-code ####
+
+```gcode
+START_PRINT EXTRUDER_TEMP=[nozzle_temperature_initial_layer] BED_TEMP=[bed_temperature_initial_layer_single] MATERIAL=[filament_type]
+```
+
+#### End G-code ####
+
+```gcode
+PRINT_END
+```
+
+#### Before layer change G-code ####
+
+```gcode
+;BEFORE_LAYER_CHANGE
+;[layer_z]
+BEFORE_LAYER_CHANGE HEIGHT=[layer_z] LAYER=[layer_num]
+```
+
+#### After layer change G-code ####
+
+```gcode
+;AFTER_LAYER_CHANGE
+;[layer_z]
+AFTER_LAYER_CHANGE
+```
+
 Credits
 -------
 
@@ -111,4 +144,3 @@ or inspired by work from:
 [Danger-Klipper]: https://github.com/DangerKlippers/danger-klipper
 [Raspberry Pi OS Lite]: https://www.raspberrypi.com/software/
 [backup image]: https://www.tomshardware.com/how-to/back-up-raspberry-pi-as-disk-image/
-[Customize your MOTD]: https://web.archive.org/web/20180729211018/https://ownyourbits.com/2017/04/05/customize-your-motd-login-message-in-debian-and-ubuntu/
