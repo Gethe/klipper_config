@@ -101,8 +101,7 @@ or inspired by work from:
 * [RatOS Config](https://github.com/Rat-OS/RatOS-configuration)
 * [Ellis' Guide](https://ellis3dp.com/Print-Tuning-Guide/)
 * [klippain](https://github.com/Frix-x/klippain)
-* [klipper-motd](https://github.com/tomaski/klipper-motd)
-* nachoparker - [Customize your MOTD]
+* [jschuh](https://github.com/jschuh/klipper-macros)
 * Drachenkatze - [Automating Klipper MCU Updates](https://docs.vorondesign.com/community/howto/drachenkatze/automating_klipper_mcu_updates.html)
 
 [Danger-Klipper]: https://github.com/DangerKlippers/danger-klipper
