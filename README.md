@@ -1,8 +1,9 @@
-# Custom Klipper Configuration
+Custom Klipper Configuration
+============================
 
 > [!CAUTION]
-> This is far from complete, let alone finished. As such it has had very little
-> practical testing.
+> This is still very much a work in progress, and has had very little practical
+> testing.
 
 This is my custom configuration for the Klipper firmware. It is designed to be
 easy to set up, and highly modular. I made this primarily to make it easier to
@@ -16,7 +17,8 @@ backup in case anything unfortunate happens.
 > and mods that they have. One of those is [Danger-Klipper], and there are
 > options in use here that won't be compatible with mainline Klipper.
 
-## Installation
+Installation
+------------
 
 You should start with a new installation of [Raspberry Pi OS Lite]. I also
 recommend setting up any OS level customizations like wifi, ssh, hostname, etc.,
@@ -30,7 +32,8 @@ required components.
 wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh | bash
 ```
 
-## Details
+Details
+-------
 
 All files in this repo will be symlinked into `~/printer_data/config`. This
 means that they will not be editable outside of the repo directory. The intent
@@ -38,14 +41,14 @@ is that the "User" files is where on-the-fly tweaks happen in order to tune the
 printer. Once things settle in, those changes should be moved to the "Host"
 files in the repo leaving the editable files mostly empty.
 
-### User
+### User ###
 
 The only files editable from the Mainsail interface will be the printer.cfg and
 moonraker.conf files that are created during installation. These are created
 with just an `[include]` to their respective host files and a boilerplate
 SAVE_CONFIG section to ensure the command works out of the box.
 
-### Host
+### Host ###
 
 The hosts' `hostname` is used in various ways to define a specific printer, so
 it's important to have a unique `hostname` for each printer using this config.
@@ -66,7 +69,7 @@ eg. _ruby.conf, _ruby.cfg, and _variables.cfg
 
 This is also where the printer specific theme and flashing files will go.
 
-### Common
+### Common ###
 
 All major config files are located in [~/custom_config/common](common/). These define
 the macros, MCUs, drivers, etc. These are generally self contained and can be
@@ -80,7 +83,8 @@ defaults for all defined user vars, along with any necessary documentation.
 
 These files will be symlinked to `~/printer_data/config/common`.
 
-## Credits
+Credits
+-------
 
 A lot of inspiration outside of my own has gone into this config, and I would be
 remiss to not place credit where it is due.
