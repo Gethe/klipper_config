@@ -8,22 +8,7 @@ bullet=$(echo -en "\e[38;5;244m")
 arrow=$(echo -en "\e[39m")
 desc=$(echo -en "\e[38;5;244m")
 clear=$(echo -en "\e[0m")
-
-# Logic for switching theme accent colors depending on user choice
-case ${HOSTNAME} in
-    "ruby")
-        value=$(echo -en "\e[38;5;88m")
-        ;;
-    "bubbles")
-        value=$(echo -en "\e[38;5;219m")
-        ;;
-    "slate")
-        value=$(echo -en "\e[38;5;33m")
-        ;;
-    *)
-        value=$(echo -en "\e[39m")
-        ;;
-esac
+value=$(echo -en "\e[39m")
 
 SERVICES=("klipper" "moonraker" "crowsnest" "KlipperScreen")
 SERVICES_COLUMNS=4

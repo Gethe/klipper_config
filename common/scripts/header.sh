@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-CONFIG_DIR=~/custom_config
-source "$CONFIG_DIR"/common/scripts/utils.sh
-source "$CONFIG_DIR"/common/scripts/globals.sh
-set_globals
-
+REPO_PATH=~/klipper_config
+source "$REPO_PATH"/common/scripts/utils.sh
 check_euid

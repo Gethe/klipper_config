@@ -19,94 +19,76 @@ if [[ ${EUID} -eq 0 ]]; then
     exit 1
 fi
 
-update() {
-    sudo apt update && sudo apt full-upgrade -y
-    sudo apt install -y git figlet </dev/null
-}
+# Script args
+PRINTER_NAME=$1
+PRINTER_DATA=$2
 
-
-KIAUH_SRCDIR="${HOME}/kiauh"
-clone_kiauh() {
-    if [ ! -d "${KIAUH_SRCDIR}" ] ; then
-        cd ~ && git clone https://github.com/dw-0/kiauh.git
-    else
-        git -C "$KIAUH_SRCDIR" pull
-    fi
-    # shellcheck source=../kiauh/scripts/backup.sh
-    source "$KIAUH_SRCDIR"/scripts/backup.sh
-    # shellcheck source=../kiauh/scripts/klipper.sh
-    source "$KIAUH_SRCDIR"/scripts/klipper.sh
-    # shellcheck source=../kiauh/scripts/mainsail.sh
-    source "$KIAUH_SRCDIR"/scripts/mainsail.sh
-    # shellcheck source=../kiauh/scripts/moonraker.sh
-    source "$KIAUH_SRCDIR"/scripts/moonraker.sh
-    # shellcheck source=../kiauh/scripts/nginx.sh
-    source "$KIAUH_SRCDIR"/scripts/nginx.sh
-}
-
-CONFIG_DIR="${HOME}/custom_config"
+REPO_PATH=~/klipper_config
 clone_config() {
-    if [ ! -d "${CONFIG_DIR}" ]; then
-        git clone https://github.com/Gethe/klipper_config.git custom_config
+    if [ ! -d "$REPO_PATH" ]; then
+        git clone https://github.com/Gethe/klipper_config.git
+
+        # Make all script files executable
+        find "$REPO_PATH"/ -type f -iname "*.sh" -exec chmod +x {} \;
+
+        status_msg "Installing git hooks"
+        if [[ ! -e "$REPO_PATH"/.git/hooks/post-merge ]]; then
+            ln -sf "$REPO_PATH"/common/scripts/update.sh "$REPO_PATH"/.git/hooks/post-merge
+            sudo chmod +x "$REPO_PATH"/.git/hooks/post-merge
+        fi
     else
-        git -C "$CONFIG_DIR" pull
+        git -C "$REPO_PATH" pull
     fi
 
-    # Make all script files executable
-    find "$CONFIG_DIR"/ -type f -iname "*.sh" -exec chmod +x {} \;
-    sudo ln -sf "$CONFIG_DIR"/common/boards/*/*.rules /etc/udev/rules.d/
-
-    source "$CONFIG_DIR"/common/scripts/utils.sh
-    source "$CONFIG_DIR"/common/scripts/globals.sh
-    source "$CONFIG_DIR"/"$HOSTNAME"/mcu.sh
-    set_globals
-
-    status_msg "Installing git hooks"
-    if [[ ! -e "$CONFIG_DIR"/.git/hooks/post-merge ]]; then
-        ln -sf "$CONFIG_DIR"/common/scripts/update.sh "$CONFIG_DIR"/.git/hooks/post-merge
-        sudo chmod +x "$CONFIG_DIR"/.git/hooks/post-merge
-    fi
+    source "$REPO_PATH"/common/scripts/utils.sh
 }
 
-klipper_screen=( ruby )
-install_firmware() {
-    local klipper_systemd_services
-    local moonraker_services
+setup_ssh_motd() {
+    status_msg "Installing console MotD"
 
-    status_msg "Installing printer firmware"
+    # Disable standard LastLog info
+    # There is a bug with `sed -i` that is causing permissions issues, so we are
+    # doing it the long way
+    sed '/PrintLastLog/cPrintLastLog no' /etc/ssh/sshd_config >tmp
+    sudo mv -f tmp /etc/ssh/sshd_config
+    chmod 0644 /etc/ssh/sshd_config
 
-    klipper_systemd_services=$(klipper_systemd)
-    if [[ -n ${klipper_systemd_services} ]]; then
-        ok_msg "Klipper already installed!"
-    else
-        set_custom_klipper_repo DangerKlippers/danger-klipper master
-        run_klipper_setup 3 "printer"
-    fi
+    # Disable default static MoTD
+    do_action_service disable motd
+    sudo rm -rf /etc/motd
 
-    moonraker_services=$(moonraker_systemd)
-    if [[ -n ${moonraker_services} ]]; then
-        ok_msg "Moonraker already installed!"
-    else
-        moonraker_setup 1
-    fi
+    # Disable default dynamic MoTD
+    sudo rm -rf /etc/update-motd.d
 
-    if [ ! -d "${MAINSAIL_DIR}" ]; then
-        install_mainsail
-    fi
+    sudo mkdir /etc/update-motd.d
+    sudo cp -r "$CONFIG_DIR"/motd/* /etc/update-motd.d/
 
-    # wget -O - https://raw.githubusercontent.com/Frix-x/klippain-shaketune/main/install.sh | bash
+    sudo chmod a+x /etc/update-motd.d/*
+    ok_msg "Console MotD installed!!"
 
-    if [[ -z ${klipper_screen[$HOSTNAME]} ]]; then
-        install_klipperscreen
-    fi
-
-    mcu_build
-    mcu_flash
+    do_action_service restart sshd
 }
 
+function link_config() {
+    status_msg "Linking config for ${PRINTER_NAME}"
+
+    local data_path=$1
+    local config_path=$data_path"/config"
+
+    ln -sf "$REPO_PATH"/common "$config_path"/common
+
+    ln -sf "$REPO_PATH/$PRINTER_NAME"/moonraker.conf "$config_path"/_"$PRINTER_NAME".conf
+    ln -sf "$REPO_PATH/$PRINTER_NAME"/printer.cfg "$config_path"/_"$PRINTER_NAME".cfg
+    ln -sf "$REPO_PATH/$PRINTER_NAME"/variables.cfg "$config_path"/_variables.cfg
+
+    echo "$PRINTER" >"$config_path"/printer.cfg
+    echo "$MOONRAKER" >"$config_path"/moonraker.conf
+
+    ok_msg "Config linked!!"
+}
 
 PRINTER=$(cat <<-END
-[include _$HOSTNAME.cfg]
+[include _$PRINTER_NAME.cfg]
 [include _variables.cfg]
 
 [gcode_macro _USER_VARIABLES]
@@ -133,16 +115,26 @@ gcode:
 END
 )
 MOONRAKER=$(cat <<-END
-[include _$HOSTNAME.conf]
+[include _$PRINTER_NAME.conf]
 
 END
 )
 
-
-update
-clone_kiauh
 clone_config
+setup_ssh_motd
 
-install_firmware
-
-print_confirm "All done!!"
+if [[ -z $PRINTER_NAME ]]; then
+    error_msg "Script must be run with the printer's name to link the config."
+else
+    if [[ -d "$REPO_PATH"/"$PRINTER_NAME" ]]; then
+        if [ -d ~/printer_"$PRINTER_NAME"_data ]; then
+            link_config ~/printer_"$PRINTER_NAME"_data
+        elif [ -d "$PRINTER_DATA" ]; then
+            link_config "$PRINTER_DATA"
+        else
+            link_config ~/printer_data
+        fi
+    else
+        error_msg "Config directory at \"$REPO_PATH/$PRINTER_NAME\" does not exist."
+    fi
+fi

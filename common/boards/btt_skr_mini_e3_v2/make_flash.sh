@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
+# shellcheck source=./common/scripts/header.sh
+source ~/klipper_config/common/scripts/header.sh
+
 function mcu_build() {
     cd "${KLIPPER_DIR}" || exit
     status_msg "Initializing firmware build ..."
 
     make clean
-    cp -f ~/custom_config/common/boards/btt_skr_mini_e3_v2/firmware.config "${KLIPPER_DIR}/.config"
+    cp -f ~/klipper_config/common/boards/btt_skr_mini_e3_v2/firmware.config "${KLIPPER_DIR}/.config"
 
     status_msg "Building firmware ..."
     make olddefconfig
