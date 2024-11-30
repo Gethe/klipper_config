@@ -1,0 +1,16 @@
+.logo-wrapper {
+    display: none !important;
+}
+
+.theme--dark .toolbar-logo {
+    background-image: url(logo.png) !important;
+    background-size: 48px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+.printer-title {
+    font-family: engravers mt, serif !important;
+    letter-spacing: -0.3rem;
+    width: 5em;
+}

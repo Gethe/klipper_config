@@ -77,6 +77,8 @@ function link_config() {
 
     ln -sf "$REPO_PATH"/common "$config_path"/common
 
+    ln -sf "$REPO_PATH/$PRINTER_NAME"/.fluidd-theme "$config_path"/.fluidd-theme
+
     ln -sf "$REPO_PATH/$PRINTER_NAME"/moonraker.conf "$config_path"/_"$PRINTER_NAME".conf
     ln -sf "$REPO_PATH/$PRINTER_NAME"/printer.cfg "$config_path"/_"$PRINTER_NAME".cfg
     ln -sf "$REPO_PATH/$PRINTER_NAME"/variables.cfg "$config_path"/_variables.cfg

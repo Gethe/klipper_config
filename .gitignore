@@ -1,4 +1,4 @@
 mcu-detection.cfg
 secrets.txt
-test.sh
+test/*
 .DS_Store

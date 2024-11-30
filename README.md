@@ -145,8 +145,8 @@ or inspired by work from:
 
 [KIAUH]: https://github.com/dw-0/kiauh
 [Danger-Klipper]: https://github.com/DangerKlippers/danger-klipper
-[Moonraker]: (https://github.com/Arksine/moonraker)
-[Fluidd]: (https://github.com/fluidd-core/fluidd)
+[Moonraker]: https://github.com/Arksine/moonraker
+[Fluidd]: https://github.com/fluidd-core/fluidd
 [Raspberry Pi OS Lite]: https://www.raspberrypi.com/software/
 [backup image]: https://www.tomshardware.com/how-to/back-up-raspberry-pi-as-disk-image/
 [Customize your MOTD]: https://web.archive.org/web/20180729211018/https://ownyourbits.com/2017/04/05/customize-your-motd-login-message-in-debian-and-ubuntu/
