@@ -92,13 +92,13 @@ Slicer Configuration
 #### Start G-code ####
 
 ```gcode
-START_PRINT EXTRUDER_TEMP=[nozzle_temperature_initial_layer] BED_TEMP=[bed_temperature_initial_layer_single] MATERIAL=[filament_type]
+START_PRINT EXTRUDER=[nozzle_temperature_initial_layer] BED=[bed_temperature_initial_layer_single] CHAMBER=[chamber_temperature] MATERIAL=[filament_type]
 ```
 
 #### End G-code ####
 
 ```gcode
-PRINT_END
+END_PRINT
 ```
 
 #### Before layer change G-code ####
