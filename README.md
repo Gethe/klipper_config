@@ -126,14 +126,12 @@ Credits
 A lot of inspiration outside of my own has gone into this config, and I would be
 remiss to not place credit where it is due.
 
-Projects that are directly used in at least one printer config include:
+Projects that this config depends on include:
 
 * [KIAUH]
 * [Danger-Klipper]
 * [Moonraker]
 * [Fluidd]
-* [klippain-shaketune](https://github.com/Frix-x/klippain-shaketune)
-* [KlipperScreen](https://github.com/KlipperScreen/KlipperScreen)
 
 Many of the scripts, macros, and config files included in this repo are based on
 or inspired by work from:
