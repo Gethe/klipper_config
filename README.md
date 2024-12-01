@@ -14,8 +14,8 @@ backup in case anything unfortunate happens.
 > Usage of this config is at your own risk.
 >
 > This config is tailored to my own printers with the specific idiosyncrasies
-> and mods that they have. One of those is [Danger-Klipper], and there are
-> options in use here that won't be compatible with mainline Klipper.
+> that they have. One of those is [Danger-Klipper], so there are options and
+> features in use here that won't be compatible with mainline Klipper.
 
 Details
 -------
@@ -23,14 +23,14 @@ Details
 This config works by symlinking the config files into `~/printer_data/config`.
 Because of this, they will not be editable outside of the repo directory. The
 intent is that the "User" files are where on-the-fly tweaks happen in order to
-tune the printer. Once things settle in, those changes should be moved to the "Printer"
-files in the repo leaving the editable files mostly empty.
+tune the printer. Once things settle in, those changes should be moved to the
+"Printer" files in the repo leaving the editable files mostly empty.
 
 ### User ###
 
 The only files editable from the web interface will be the printer.cfg and
 moonraker.conf files that are created during installation. These are created
-with just an `[include]` to their respective host files and a boilerplate
+with just an `[include]` to their respective "Printer" files and a boilerplate
 SAVE_CONFIG section to ensure the command works out of the box.
 
 ### Printer ###
@@ -41,12 +41,13 @@ especially important if hosting multiple printers on one device.
 
 In the repo directory, there should be separate directories with unique names
 used to identify a printer (eg. [~/klipper_config/ruby](ruby/) or
-[~/klipper_config/slate](slate/)). This is where printer specific files are kept,
-including the printer.cfg and moonraker.conf files. Each will have `[include]`s
-to their respective "Common" files for the various hardware and software that it
-uses. Also here is a variables.cfg for printer specific variable overrides.
+[~/klipper_config/slate](slate/)). This is where printer specific files are kept
+to actually define its hardware capabilities. Each will have `[include]`s to
+their respective "Common" files for the various hardware and software that it
+uses.
 
-These files will be symlinked as eg. _ruby.conf, _ruby.cfg, and _variables.cfg.
+These files will be symlinked to the config folder as eg. _ruby.conf, _ruby.cfg,
+and _variables.cfg.
 
 ### Common ###
 
@@ -68,12 +69,15 @@ recommend setting up any OS level customizations like wifi, ssh, hostname, etc.,
 then making a [backup image] prior to installing this config. This can then be
 used to quickly spin up a new printer, or recover an existing one.
 
-[KIAUH] is recommended to then install [Danger-Klipper], [Moonraker], [Fluidd], and to
-flash your MCU(s). See [this guide](https://github.com/DangerKlippers/danger-klipper?tab=readme-ov-file#option-2-using-kiauh)
-for more on how to set up DK in KIAUH.
+[KIAUH] is recommended to then install [Danger-Klipper], [Moonraker], and
+[Fluidd], as well as to flash your MCU(s). See [this guide] for more on how to
+set up DK in KIAUH.
 
-Run the script below to clone this repo and create symlinks for the given
-printer's config. Replace `name` with the name of the printer.
+Before installing the actual config, first [fork this repo] and rename the
+folders for my printers (bubbles, ruby, and slate) to match yours. You will want
+to customize the files therein of course, but this will get you started. Run the
+script below to clone this repo and create symlinks for the given printer's
+config. Replace `name` with the name of the printer.
 
 ``` bash
 wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh | bash -s name
@@ -81,8 +85,9 @@ wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh
 
 The install script supports multi-instance setups. It will auto detect if the
 folder `~/printer_<name>_data` exists and will default to that location instead
-of `~/printer_data`. If a printer uses a different naming scheme, the full path
-can be supplied as an optional second parameter to the install script.
+of `~/printer_data` as described in [Details](#details). If your printer uses a
+different naming scheme, the full path can be supplied as an optional second
+parameter to the install script.
 
 Slicer Configuration
 --------------------
@@ -104,15 +109,13 @@ END_PRINT
 #### Before layer change G-code ####
 
 ```gcode
-;BEFORE_LAYER_CHANGE
-;[layer_z]
 BEFORE_LAYER_CHANGE HEIGHT=[layer_z] LAYER=[layer_num]
+;[layer_z]
 ```
 
 #### After layer change G-code ####
 
 ```gcode
-;AFTER_LAYER_CHANGE
 ;[layer_z]
 AFTER_LAYER_CHANGE
 ```
@@ -141,7 +144,7 @@ or inspired by work from:
 * [jschuh/klipper-macros](https://github.com/jschuh/klipper-macros)
 * [tomaski/klipper-motd](https://github.com/tomaski/klipper-motd)
 * [bumbeng/Fluidd_theme_simple](https://github.com/bumbeng/Fluidd_theme_simple)
-* nachoparker - [Customize your MOTD]
+* nachoparker - [Customize your MOTD](https://web.archive.org/web/20180729211018/https://ownyourbits.com/2017/04/05/customize-your-motd-login-message-in-debian-and-ubuntu/)
 * Drachenkatze - [Automating Klipper MCU Updates](https://docs.vorondesign.com/community/howto/drachenkatze/automating_klipper_mcu_updates.html)
 
 [KIAUH]: https://github.com/dw-0/kiauh
@@ -150,4 +153,5 @@ or inspired by work from:
 [Fluidd]: https://github.com/fluidd-core/fluidd
 [Raspberry Pi OS Lite]: https://www.raspberrypi.com/software/
 [backup image]: https://www.tomshardware.com/how-to/back-up-raspberry-pi-as-disk-image/
-[Customize your MOTD]: https://web.archive.org/web/20180729211018/https://ownyourbits.com/2017/04/05/customize-your-motd-login-message-in-debian-and-ubuntu/
+[this guide]: https://github.com/DangerKlippers/danger-klipper?tab=readme-ov-file#option-2-using-kiauh
+[fork this repo]: https://github.com/gethe/klipper_config/fork
