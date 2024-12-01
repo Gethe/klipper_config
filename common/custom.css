@@ -1,0 +1,34 @@
+/* Custom Header Logo */
+.logo-wrapper {
+    display: none !important;
+}
+
+.theme--dark .toolbar-logo {
+    background-image: url(../.fluidd-theme/logo.png) !important;
+    background-size: 48px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+/* Full Width Bar-Style Axis Control  */
+.row.align-start.justify-space-between {
+    margin-top: 1px !important;
+}
+.controls-wrapper.col {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    max-width: 1000px !important;
+    min-width: 350px !important;
+    display: inline !important;
+}
+
+/* Move Description Above Slider Input  */
+.v-application .text-body-1 {
+    font-size: 0.85rem !important;
+    line-height: 2rem !important;
+}
+.col-sm-5 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+}

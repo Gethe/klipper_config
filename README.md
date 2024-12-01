@@ -140,6 +140,7 @@ or inspired by work from:
 * [Frix-x/klippain](https://github.com/Frix-x/klippain)
 * [jschuh/klipper-macros](https://github.com/jschuh/klipper-macros)
 * [tomaski/klipper-motd](https://github.com/tomaski/klipper-motd)
+* [bumbeng/Fluidd_theme_simple](https://github.com/bumbeng/Fluidd_theme_simple)
 * nachoparker - [Customize your MOTD]
 * Drachenkatze - [Automating Klipper MCU Updates](https://docs.vorondesign.com/community/howto/drachenkatze/automating_klipper_mcu_updates.html)
 
