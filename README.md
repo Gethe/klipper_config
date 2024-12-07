@@ -5,16 +5,16 @@ Custom Klipper Configuration
 > This is still very much a work in progress, and has had very little practical
 > testing.
 
-This is my custom configuration for the Klipper firmware. It is designed to be
-easy to set up, and highly modular. I made this primarily to make it easier to
-share macros and other settings between printers, as well as to provide a config
-backup in case anything unfortunate happens.
+This is my custom configuration for the [Kalico] 3D printer firmware. It is
+designed to be easy to set up, and highly modular. I made this primarily to make
+it easier to share macros and other settings between printers, as well as to
+provide a config backup in case anything unfortunate happens.
 
 > [!WARNING]
 > Usage of this config is at your own risk.
 >
 > This config is tailored to my own printers with the specific idiosyncrasies
-> that they have. One of those is [Danger-Klipper], so there are options and
+> that they have. One of those is [Kalico], so there are options and
 > features in use here that won't be compatible with mainline Klipper.
 
 Details
@@ -69,7 +69,7 @@ recommend setting up any OS level customizations like wifi, ssh, hostname, etc.,
 then making a [backup image] prior to installing this config. This can then be
 used to quickly spin up a new printer, or recover an existing one.
 
-[KIAUH] is recommended to then install [Danger-Klipper], [Moonraker], and
+[KIAUH] is recommended to then install [Kalico], [Moonraker], and
 [Fluidd], as well as to flash your MCU(s). See [this guide] for more on how to
 set up DK in KIAUH.
 
@@ -129,7 +129,7 @@ remiss to not place credit where it is due.
 Projects that this config depends on include:
 
 * [KIAUH]
-* [Danger-Klipper]
+* [Kalico]
 * [Moonraker]
 * [Fluidd]
 
@@ -146,10 +146,10 @@ or inspired by work from:
 * Drachenkatze - [Automating Klipper MCU Updates](https://docs.vorondesign.com/community/howto/drachenkatze/automating_klipper_mcu_updates.html)
 
 [KIAUH]: https://github.com/dw-0/kiauh
-[Danger-Klipper]: https://github.com/DangerKlippers/danger-klipper
+[Kalico]: https://github.com/KalicoCrew/kalico
 [Moonraker]: https://github.com/Arksine/moonraker
 [Fluidd]: https://github.com/fluidd-core/fluidd
 [Raspberry Pi OS Lite]: https://www.raspberrypi.com/software/
 [backup image]: https://www.tomshardware.com/how-to/back-up-raspberry-pi-as-disk-image/
-[this guide]: https://github.com/DangerKlippers/danger-klipper?tab=readme-ov-file#option-2-using-kiauh
+[this guide]: https://github.com/KalicoCrew/kalico?tab=readme-ov-file#option-2-using-kiauh
 [fork this repo]: https://github.com/gethe/klipper_config/fork
