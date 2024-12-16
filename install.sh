@@ -106,10 +106,11 @@ gcode:
 #*# pid_kd = 485.827
 #*#
 #*# [extruder]
-#*# control = pid
-#*# pid_kp = 22.525
-#*# pid_ki = 1.146
-#*# pid_kd = 110.652
+#*# control = mpc
+#*# block_heat_capacity = 18.8963
+#*# sensor_responsiveness = 0.108925
+#*# ambient_transfer = 0.0889668
+#*# fan_ambient_transfer = 0.0889668, 0.158646, 0.163268, 0.166996, 0.174824, 0.178281, 0.181468
 #*#
 #*# [stepper_z]
 #*# position_endstop = 116.575
