@@ -151,5 +151,5 @@ or inspired by work from:
 [Fluidd]: https://github.com/fluidd-core/fluidd
 [Raspberry Pi OS Lite]: https://www.raspberrypi.com/software/
 [backup image]: https://www.tomshardware.com/how-to/back-up-raspberry-pi-as-disk-image/
-[this guide]: https://github.com/KalicoCrew/kalico?tab=readme-ov-file#option-2-using-kiauh
+[this guide]: https://docs.kalico.gg/Migrating_from_Klipper.html#option-2-using-kiauh
 [fork this repo]: https://github.com/gethe/klipper_config/fork
