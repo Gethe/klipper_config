@@ -129,7 +129,7 @@ setup_ssh_motd
 if [[ -z $PRINTER_NAME ]]; then
     error_msg "Script must be run with the printer's name to link the config."
 else
-    if [[ -d "$REPO_PATH"/"$PRINTER_NAME" ]]; then
+    if [[ -d "$REPO_PATH"/printer_"$PRINTER_NAME" ]]; then
         if [ -d ~/printer_"$PRINTER_NAME"_data ]; then
             link_config ~/printer_"$PRINTER_NAME"_data
         elif [ -d "$PRINTER_DATA" ]; then
@@ -138,6 +138,6 @@ else
             link_config ~/printer_data
         fi
     else
-        error_msg "Config directory at \"$REPO_PATH/$PRINTER_NAME\" does not exist."
+        error_msg "Config directory at \"$REPO_PATH/printer_$PRINTER_NAME\" does not exist."
     fi
 fi

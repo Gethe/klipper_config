@@ -40,11 +40,11 @@ important to have a unique name for each printer using this config. This is
 especially important if hosting multiple printers on one device.
 
 In the repo directory, there should be separate directories with unique names
-used to identify a printer (eg. [~/klipper_config/ruby](ruby/) or
-[~/klipper_config/slate](slate/)). This is where printer specific files are kept
-to actually define its hardware capabilities. Each will have `[include]`s to
-their respective "Common" files for the various hardware and software that it
-uses.
+used to identify a printer (eg. [~/klipper_config/printer_ruby](printer_ruby/)
+or [~/klipper_config/printer_slate](printer_slate/)). This is where printer
+specific files are kept to actually define its hardware capabilities. Each will
+have `[include]`s to their respective "Common" files for the various hardware
+and software that it uses.
 
 These files will be symlinked to the config folder as eg. _ruby.conf, _ruby.cfg,
 and _variables.cfg.
@@ -76,8 +76,8 @@ set up DK in KIAUH.
 Before installing the actual config, first [fork this repo] and rename the
 folders for my printers (bubbles, ruby, and slate) to match yours. You will want
 to customize the files therein of course, but this will get you started. Run the
-script below to clone this repo and create symlinks for the given printer's
-config. Replace `name` with the name of the printer.
+script below and it will clone the repo and create symlinks for the given
+printer's config. Replace `name` with the name of the printer.
 
 ``` bash
 wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh | bash -s name
