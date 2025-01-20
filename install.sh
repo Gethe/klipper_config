@@ -44,29 +44,33 @@ clone_config() {
 }
 
 setup_ssh_motd() {
-    status_msg "Installing console MotD"
+    if [ -d /etc/update-motd.d/logo ]; then
+        status_msg "Console MotD already installed, skipping..."
+    else
+        status_msg "Installing console MotD"
 
-    # Disable standard LastLog info
-    # There is a bug with `sed -i` that is causing permissions issues, so we are
-    # doing it the long way
-    sed '/PrintLastLog/cPrintLastLog no' /etc/ssh/sshd_config >tmp
-    sudo mv -f tmp /etc/ssh/sshd_config
-    chmod 0644 /etc/ssh/sshd_config
+        # Disable standard LastLog info
+        # There is a bug with `sed -i` that is causing permissions issues, so we are
+        # doing it the long way
+        sed '/PrintLastLog/cPrintLastLog no' /etc/ssh/sshd_config >tmp
+        sudo mv -f tmp /etc/ssh/sshd_config
+        chmod 0644 /etc/ssh/sshd_config
 
-    # Disable default static MoTD
-    do_action_service disable motd
-    sudo rm -rf /etc/motd
+        # Disable default static MoTD
+        do_action_service disable motd
+        sudo rm -rf /etc/motd
 
-    # Disable default dynamic MoTD
-    sudo rm -rf /etc/update-motd.d
+        # Disable default dynamic MoTD
+        sudo rm -rf /etc/update-motd.d
 
-    sudo mkdir /etc/update-motd.d
-    sudo cp -r "$CONFIG_DIR"/motd/* /etc/update-motd.d/
+        sudo mkdir /etc/update-motd.d
+        sudo cp -r "$CONFIG_DIR"/motd/* /etc/update-motd.d/
 
-    sudo chmod a+x /etc/update-motd.d/*
-    ok_msg "Console MotD installed!!"
+        sudo chmod a+x /etc/update-motd.d/*
+        ok_msg "Console MotD installed!!"
 
-    do_action_service restart sshd
+        do_action_service restart sshd
+    fi
 }
 
 function link_config() {
