@@ -64,7 +64,7 @@ setup_ssh_motd() {
         sudo rm -rf /etc/update-motd.d
 
         sudo mkdir /etc/update-motd.d
-        sudo cp -r "$CONFIG_DIR"/motd/. /etc/update-motd.d
+        sudo cp -r "$REPO_PATH"/motd/. /etc/update-motd.d
 
         sudo chmod a+x /etc/update-motd.d/*
         ok_msg "Console MotD installed!!"
@@ -77,13 +77,13 @@ function link_config() {
     status_msg "Linking config for ${printer_name}"
 
     local data_path=$1
-    local source_path=$2
     local config_path=$data_path"/config"
+
+    local source_path=$2
 
     ln -sf "$REPO_PATH"/common "$config_path"/common
 
     ln -sf "$source_path"/.fluidd-theme "$config_path"/.fluidd-theme
-
     ln -sf "$source_path"/moonraker.conf "$config_path"/_"$printer_name".conf
     ln -sf "$source_path"/printer.cfg "$config_path"/_"$printer_name".cfg
     ln -sf "$source_path"/variables.cfg "$config_path"/_variables.cfg
@@ -127,27 +127,27 @@ EOF
 clone_config
 setup_ssh_motd
 
-for dir in printer_*/; do
+for dir in "$REPO_PATH"/printer_*/; do
     dir=${dir%*/}      # remove the trailing "/"
-    printer_name=${dir##*_}     # remove "printer_"
+    printer_name=${dir##*_}     # isolate the name
 
     if [[ -z $NAME ]]; then
         if [ -d ~/printer_"$printer_name"_data ]; then
-            link_config ~/printer_"$printer_name"_data "$REPO_PATH/$dir"
+            link_config ~/printer_"$printer_name"_data "$dir"
         else
             error_msg "Data path for printer \"$printer_name\" could not be automatically determined."
         fi
     elif [[ $NAME == "$printer_name" ]]; then
         if [[ $DATA ]]; then
             if [ -d "$DATA" ]; then
-                link_config "$DATA" "$REPO_PATH/$dir"
+                link_config "$DATA" "$dir"
             else
                 error_msg "Data path \"$DATA\" could not be found."
             fi
         elif [ -d ~/printer_"$NAME"_data ]; then
-            link_config ~/printer_"$NAME"_data "$REPO_PATH/$dir"
+            link_config ~/printer_"$NAME"_data "$dir"
         else
-            link_config ~/printer_data "$REPO_PATH/$dir"
+            link_config ~/printer_data "$dir"
         fi
 
         break

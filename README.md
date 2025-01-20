@@ -89,6 +89,13 @@ KIAUH -- `~/printer_data` for single-instance setups and `~/printer_<name>_data`
 for multi-instance setups. If you're using a different naming scheme, the full
 path can be supplied as an optional second parameter to the install script.
 
+If you're setting up a new printer on a multi-instance host, run this command
+from `$HOME`:
+
+``` bash
+./klipper_config/install.sh <name>
+```
+
 Slicer Configuration
 --------------------
 
