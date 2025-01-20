@@ -1,7 +1,7 @@
 @import "../common/custom.css";
 
 .printer-title {
-    font-family: blackoak std, serif !important;
+    font-family: blackoak std, georgia, serif !important;
     padding-top: 0.2em !important;
     text-transform: uppercase !important;
 }
