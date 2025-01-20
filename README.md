@@ -92,12 +92,14 @@ path can be supplied as an optional second parameter to the install script.
 Slicer Configuration
 --------------------
 
-### PrusaSlicer and derivatives ###
+<details>
+<summary>OrcaSlicer</summary>
+In OrcaSlicer go to "Printer settings" -> "Machine start g-code" and update it to:
 
 #### Start G-code ####
 
 ```gcode
-START_PRINT EXTRUDER=[nozzle_temperature_initial_layer] BED=[bed_temperature_initial_layer_single] CHAMBER=[chamber_temperature] MATERIAL=[filament_type]
+START_PRINT EXTRUDER=[first_layer_temperature[initial_extruder]] BED=[first_layer_bed_temperature[initial_extruder]] CHAMBER=[chamber_temperature[initial_extruder]] MATERIAL=[filament_type[initial_extruder]]
 ```
 
 #### End G-code ####
@@ -110,7 +112,6 @@ END_PRINT
 
 ```gcode
 BEFORE_LAYER_CHANGE HEIGHT=[layer_z] LAYER=[layer_num]
-;[layer_z]
 ```
 
 #### After layer change G-code ####
@@ -119,6 +120,8 @@ BEFORE_LAYER_CHANGE HEIGHT=[layer_z] LAYER=[layer_num]
 ;[layer_z]
 AFTER_LAYER_CHANGE
 ```
+
+</details>
 
 Credits
 -------
