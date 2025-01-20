@@ -64,30 +64,30 @@ defaults for all defined user vars, along with any necessary documentation.
 Installation
 ------------
 
-You should start with a new installation of [Raspberry Pi OS Lite]. I also
-recommend setting up any OS level customizations like wifi, ssh, hostname, etc.,
-then making a [backup image] prior to installing this config. This can then be
-used to quickly spin up a new printer, or recover an existing one.
+You should start with a fresh OS installation, like [Raspberry Pi OS Lite]. If
+using a some other spare computer, I recommend [Pop!_OS]. I also recommend
+setting up any OS level customizations like wifi, ssh, hostname, etc., then
+making a [backup image] prior to installing this config. This can then be used
+to quickly spin up a new printer, or recover an existing one.
 
-[KIAUH] is recommended to then install [Kalico], [Moonraker], and
-[Fluidd], as well as to flash your MCU(s). See [this guide] for more on how to
-set up DK in KIAUH.
+Next, you'll need to [fork this repo] and rename the `printer_<name>` folders to
+match your setup. If you're not comfortable with linux and git commands, you can
+press period (.) to open web vs code. From here you can rename the folders and
+then in the Source Control tab enter "Rename printer folders" as the message and
+click "Commit & Push".
 
-Before installing the actual config, first [fork this repo] and rename the
-folders for my printers (bubbles, ruby, and slate) to match yours. You will want
-to customize the files therein of course, but this will get you started. Run the
-script below and it will clone the repo and create symlinks for the given
-printer's config. Replace `name` with the name of the printer.
+Install [KIAUH] and use [this guide] to install [Kalico]. If installing multiple
+instances, be sure to use the same names used for the folders above. You'll also
+need to install [Moonraker] and [Fluidd], as well as to flash your MCU(s).
 
 ``` bash
 wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh | bash -s name
 ```
 
-The install script supports multi-instance setups. It will auto detect if the
-folder `~/printer_<name>_data` exists and will default to that location instead
-of `~/printer_data` as described in [Details](#details). If your printer uses a
-different naming scheme, the full path can be supplied as an optional second
-parameter to the install script.
+The install script will look for folders matching the default patterns used by
+KIAUH -- `~/printer_data` for single-instance setups and `~/printer_<name>_data`
+for multi-instance setups. If you're using a different naming scheme, the full
+path can be supplied as an optional second parameter to the install script.
 
 Slicer Configuration
 --------------------
@@ -150,6 +150,7 @@ or inspired by work from:
 [Moonraker]: https://github.com/Arksine/moonraker
 [Fluidd]: https://github.com/fluidd-core/fluidd
 [Raspberry Pi OS Lite]: https://www.raspberrypi.com/software/
+[Pop!_OS]: https://pop.system76.com/
 [backup image]: https://www.tomshardware.com/how-to/back-up-raspberry-pi-as-disk-image/
 [this guide]: https://docs.kalico.gg/Migrating_from_Klipper.html#option-2-using-kiauh
 [fork this repo]: https://github.com/gethe/klipper_config/fork

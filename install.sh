@@ -20,8 +20,8 @@ if [[ ${EUID} -eq 0 ]]; then
 fi
 
 # Script args
-PRINTER_NAME=$1
-PRINTER_DATA=$2
+NAME=$1
+DATA=$2
 
 REPO_PATH=~/klipper_config
 clone_config() {
@@ -70,27 +70,22 @@ setup_ssh_motd() {
 }
 
 function link_config() {
-    status_msg "Linking config for ${PRINTER_NAME}"
+    status_msg "Linking config for ${printer_name}"
 
     local data_path=$1
+    local source_path=$2
     local config_path=$data_path"/config"
 
     ln -sf "$REPO_PATH"/common "$config_path"/common
 
-    ln -sf "$REPO_PATH/$PRINTER_NAME"/.fluidd-theme "$config_path"/.fluidd-theme
+    ln -sf "$source_path"/.fluidd-theme "$config_path"/.fluidd-theme
 
-    ln -sf "$REPO_PATH/$PRINTER_NAME"/moonraker.conf "$config_path"/_"$PRINTER_NAME".conf
-    ln -sf "$REPO_PATH/$PRINTER_NAME"/printer.cfg "$config_path"/_"$PRINTER_NAME".cfg
-    ln -sf "$REPO_PATH/$PRINTER_NAME"/variables.cfg "$config_path"/_variables.cfg
+    ln -sf "$source_path"/moonraker.conf "$config_path"/_"$printer_name".conf
+    ln -sf "$source_path"/printer.cfg "$config_path"/_"$printer_name".cfg
+    ln -sf "$source_path"/variables.cfg "$config_path"/_variables.cfg
 
-    echo "$PRINTER" >"$config_path"/printer.cfg
-    echo "$MOONRAKER" >"$config_path"/moonraker.conf
-
-    ok_msg "Config linked!!"
-}
-
-PRINTER=$(cat <<-END
-[include _$PRINTER_NAME.cfg]
+    cat > "$config_path"/printer.cfg << EOF
+[include _$printer_name.cfg]
 [include _variables.cfg]
 
 [gcode_macro _USER_VARIABLES]
@@ -115,29 +110,44 @@ gcode:
 #*# [stepper_z]
 #*# position_endstop = 116.575
 
-END
-)
-MOONRAKER=$(cat <<-END
-[include _$PRINTER_NAME.conf]
+EOF
 
-END
-)
+    cat > "$config_path"/moonraker.conf << EOF
+[include _$printer_name.conf]
+
+EOF
+
+    ok_msg "Config linked!!"
+}
 
 clone_config
 setup_ssh_motd
 
-if [[ -z $PRINTER_NAME ]]; then
-    error_msg "Script must be run with the printer's name to link the config."
-else
-    if [[ -d "$REPO_PATH"/printer_"$PRINTER_NAME" ]]; then
-        if [ -d ~/printer_"$PRINTER_NAME"_data ]; then
-            link_config ~/printer_"$PRINTER_NAME"_data
-        elif [ -d "$PRINTER_DATA" ]; then
-            link_config "$PRINTER_DATA"
+for dir in printer_*/; do
+    dir=${dir%*/}      # remove the trailing "/"
+    printer_name=${dir##*_}     # remove "printer_"
+
+    if [[ -z $NAME ]]; then
+        if [ -d ~/printer_"$printer_name"_data ]; then
+            link_config ~/printer_"$printer_name"_data "$REPO_PATH/$dir"
         else
-            link_config ~/printer_data
+            error_msg "Data path for printer \"$printer_name\" could not be automatically determined."
         fi
-    else
-        error_msg "Config directory at \"$REPO_PATH/printer_$PRINTER_NAME\" does not exist."
+    elif [[ $NAME == "$printer_name" ]]; then
+        if [[ $DATA ]]; then
+            if [ -d "$DATA" ]; then
+                link_config "$DATA" "$REPO_PATH/$dir"
+            else
+                error_msg "Data path \"$DATA\" could not be found."
+            fi
+        elif [ -d ~/printer_"$NAME"_data ]; then
+            link_config ~/printer_"$NAME"_data "$REPO_PATH/$dir"
+        else
+            link_config ~/printer_data "$REPO_PATH/$dir"
+        fi
+
+        break
     fi
-fi
+done
+
+ok_msg "Finished installation!"
