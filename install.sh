@@ -64,7 +64,7 @@ setup_ssh_motd() {
         sudo rm -rf /etc/update-motd.d
 
         sudo mkdir /etc/update-motd.d
-        sudo cp -r "$CONFIG_DIR"/motd/* /etc/update-motd.d/
+        sudo cp -r "$CONFIG_DIR"/motd/. /etc/update-motd.d
 
         sudo chmod a+x /etc/update-motd.d/*
         ok_msg "Console MotD installed!!"
