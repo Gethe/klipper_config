@@ -150,6 +150,7 @@ or inspired by work from:
 * [Ellis' Guide](https://ellis3dp.com/Print-Tuning-Guide/)
 * [Frix-x/klippain](https://github.com/Frix-x/klippain)
 * [kyleisah/KAMP](https://github.com/kyleisah/Klipper-Adaptive-Meshing-Purging)
+* [voidtrance/voron-klipper-extensions](https://github.com/voidtrance/voron-klipper-extensions)
 * [jschuh/klipper-macros](https://github.com/jschuh/klipper-macros)
 * [tomaski/klipper-motd](https://github.com/tomaski/klipper-motd)
 * [bumbeng/Fluidd_theme_simple](https://github.com/bumbeng/Fluidd_theme_simple)

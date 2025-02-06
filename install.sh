@@ -31,8 +31,8 @@ clone_config() {
         # Make all script files executable
         find "$REPO_PATH"/ -type f -iname "*.sh" -exec chmod +x {} \;
 
-        status_msg "Installing git hooks"
         if [[ ! -e "$REPO_PATH"/.git/hooks/post-merge ]]; then
+            status_msg "Installing git hooks"
             ln -sf "$REPO_PATH"/common/scripts/update.sh "$REPO_PATH"/.git/hooks/post-merge
             sudo chmod +x "$REPO_PATH"/.git/hooks/post-merge
         fi
@@ -41,6 +41,10 @@ clone_config() {
     fi
 
     source "$REPO_PATH"/common/scripts/utils.sh
+}
+
+install_plugins() {
+    ln -sf "$REPO_PATH"/plugins/. ~/klipper/plugins
 }
 
 setup_ssh_motd() {
@@ -125,6 +129,7 @@ EOF
 }
 
 clone_config
+install_plugins
 setup_ssh_motd
 
 for dir in "$REPO_PATH"/printer_*/; do
