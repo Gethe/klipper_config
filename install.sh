@@ -44,7 +44,7 @@ clone_config() {
 }
 
 install_plugins() {
-    ln -sf "$REPO_PATH"/plugins/. ~/klipper/plugins
+    ln -sf "$REPO_PATH"/plugins/*.py ~/klipper/klippy/plugins/
 }
 
 setup_ssh_motd() {
@@ -78,6 +78,8 @@ setup_ssh_motd() {
 }
 
 function link_config() {
+    $REPO_PATH/scripts/shaketune.sh "$printer_name"
+
     status_msg "Linking config for ${printer_name}"
 
     local data_path=$1

@@ -118,7 +118,7 @@ END_PRINT
 #### Before layer change G-code ####
 
 ```gcode
-BEFORE_LAYER_CHANGE HEIGHT=[layer_z] LAYER=[layer_num]
+BEFORE_LAYER_CHANGE Z=[layer_z] LAYER=[layer_num]
 ```
 
 #### After layer change G-code ####
@@ -142,6 +142,7 @@ Projects that this config depends on include:
 * [Kalico]
 * [Moonraker]
 * [Fluidd]
+* [Shake&Tune](https://github.com/Frix-x/klippain-shaketune/tree/main)]
 
 Many of the scripts, macros, and config files included in this repo are based on
 or inspired by work from:
