@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# ~/klipper_config/common/scripts/update.sh
+
 # shellcheck source=./common/scripts/header.sh
 source ~/klipper_config/common/scripts/header.sh
 

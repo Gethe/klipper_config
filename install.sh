@@ -30,13 +30,14 @@ clone_config() {
 
         # Make all script files executable
         find "$REPO_PATH"/ -type f -iname "*.sh" -exec chmod +x {} \;
+        source "$REPO_PATH"/common/scripts/utils.sh
 
         if [[ ! -e "$REPO_PATH"/.git/hooks/post-merge ]]; then
-            status_msg "Installing git hooks"
             ln -sf "$REPO_PATH"/common/scripts/update.sh "$REPO_PATH"/.git/hooks/post-merge
             sudo chmod +x "$REPO_PATH"/.git/hooks/post-merge
         fi
     else
+        # git -C ~/klipper_config pull
         git -C "$REPO_PATH" pull
     fi
 
@@ -78,17 +79,19 @@ setup_ssh_motd() {
 }
 
 function link_config() {
-    $REPO_PATH/scripts/shaketune.sh "$printer_name"
-
-    status_msg "Linking config for ${printer_name}"
-
     local data_path=$1
     local config_path=$data_path"/config"
 
-    local source_path=$2
+    if [[ $data_path == ~/printer_data ]]; then
+        $REPO_PATH/common/scripts/shaketune.sh false "$config_path"
+    else
+        $REPO_PATH/common/scripts/shaketune.sh "$printer_name" "$config_path"
+    fi
 
+    status_msg "Linking config for ${printer_name}"
     ln -sf "$REPO_PATH"/common "$config_path"/common
 
+    local source_path=$2
     ln -sf "$source_path"/.fluidd-theme "$config_path"/.fluidd-theme
     ln -sf "$source_path"/moonraker.conf "$config_path"/_"$printer_name".conf
     ln -sf "$source_path"/printer.cfg "$config_path"/_"$printer_name".cfg

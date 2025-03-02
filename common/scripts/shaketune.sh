@@ -2,11 +2,16 @@
 
 # shellcheck disable=all
 
-# Script args
 NAME=$1
+klipper_service="klipper"
+moonraker_service="moonraker"
+if [[ $NAME != "false" ]]; then
+    klipper_service="klipper-${NAME}"
+    moonraker_service="moonraker-${NAME}"
+fi
 
-USER_CONFIG_PATH="${HOME}/printer_${NAME}_data/config"
-MOONRAKER_CONFIG="${HOME}/printer_${NAME}_data/config/moonraker.conf"
+USER_CONFIG_PATH=$2
+MOONRAKER_CONFIG="${USER_CONFIG_PATH}/moonraker.conf"
 KLIPPER_PATH="${HOME}/klipper"
 KLIPPER_VENV_PATH="${KLIPPER_VENV:-${HOME}/klippy-env}"
 
@@ -15,14 +20,6 @@ K_SHAKETUNE_PATH="${HOME}/klippain_shaketune"
 
 set -eu
 export LC_ALL=C
-
-klipper_service="klipper"
-moonraker_service="moonraker"
-if [[ $NAME ]]; then
-    klipper_service="klipper-${NAME}"
-    moonraker_service="moonraker-${NAME}"
-fi
-
 
 
 function preflight_checks {
@@ -36,7 +33,7 @@ function preflight_checks {
         exit -1
     fi
 
-    if [ "$(sudo systemctl list-units --full -all -t service --no-legend | grep -F "$klipper_service.service")" ]; then
+    if [ "$(sudo systemctl list-units --full -all -t service --no-legend | grep -F $klipper_service.service)" ]; then
         printf "[PRE-CHECK] Klipper service found! Continuing...\n\n"
     else
         echo "[ERROR] Klipper service not found, please install Klipper first!"

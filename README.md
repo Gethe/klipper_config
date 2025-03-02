@@ -142,7 +142,7 @@ Projects that this config depends on include:
 * [Kalico]
 * [Moonraker]
 * [Fluidd]
-* [Shake&Tune](https://github.com/Frix-x/klippain-shaketune/tree/main)]
+* [Shake&Tune](https://github.com/Frix-x/klippain-shaketune/tree/main)
 
 Many of the scripts, macros, and config files included in this repo are based on
 or inspired by work from:
