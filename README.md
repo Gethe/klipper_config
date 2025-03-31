@@ -81,7 +81,7 @@ instances, be sure to use the same names used for the folders above. You'll also
 need to install [Moonraker] and [Fluidd], as well as to flash your MCU(s).
 
 ``` bash
-wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh | bash -s name
+wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh | bash
 ```
 
 The install script will look for folders matching the default patterns used by

@@ -144,23 +144,29 @@ for dir in "$REPO_PATH"/printer_*/; do
     if [[ -z $NAME ]]; then
         if [ -d ~/printer_"$printer_name"_data ]; then
             link_config ~/printer_"$printer_name"_data "$dir"
+        elif [[ "$printer_name" == "$HOSTNAME" ]]; then
+            link_config ~/printer_data "$dir"
         else
             error_msg "Data path for printer \"$printer_name\" could not be automatically determined."
         fi
-    elif [[ $NAME == "$printer_name" ]]; then
-        if [[ $DATA ]]; then
-            if [ -d "$DATA" ]; then
-                link_config "$DATA" "$dir"
+    else
+        if [[ "$printer_name" == "$NAME" ]]; then
+            if [[ $DATA ]]; then
+                if [ -d "$DATA" ]; then
+                    link_config "$DATA" "$dir"
+                else
+                    error_msg "Data path \"$DATA\" could not be found."
+                fi
+            elif [ -d ~/printer_"$printer_name"_data ]; then
+                link_config ~/printer_"$printer_name"_data "$dir"
             else
-                error_msg "Data path \"$DATA\" could not be found."
+                link_config ~/printer_data "$dir"
             fi
-        elif [ -d ~/printer_"$NAME"_data ]; then
-            link_config ~/printer_"$NAME"_data "$dir"
-        else
-            link_config ~/printer_data "$dir"
-        fi
 
-        break
+            break
+        else
+            error_msg "Printer \"$NAME\" could not be could not be found."
+        fi
     fi
 done
 
