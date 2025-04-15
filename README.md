@@ -79,7 +79,7 @@ other spare computer, I recommend [Pop!_OS]. Set up any OS-level customizations
 like wifi, ssh, etc., then run the `setupOS` script:
 
 ``` bash
-wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/setupOS.sh | bash <userName>/klipper_config
+wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/setupOS.sh | bash -s <userName>/klipper_config
 ```
 
 This script will install certain dependencies like git and then clone [KIAUH],

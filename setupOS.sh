@@ -43,11 +43,14 @@ clone_repos() {
 
     if ssh -q git@github.com; [ $? -eq 255 ]; then
         # not authenticated, use https
-        git clone "https://github.com/$REPO.git"
+        git clone "https://github.com/$REPO.git" ~/klipper_config
     else
         echo "ssh authenticated!!"
-        git clone "git@github.com:$REPO.git"
+        git clone "git@github.com:$REPO.git" ~/klipper_config
     fi
+
+    # shellcheck source=./common/scripts/utils.sh
+    source ~/klipper_config/common/scripts/utils.sh
 }
 
 setup_ssh_motd() {
