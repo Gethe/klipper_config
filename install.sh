@@ -48,36 +48,6 @@ install_plugins() {
     ln -sf "$REPO_PATH"/plugins/*.py ~/klipper/klippy/plugins/
 }
 
-setup_ssh_motd() {
-    if [ -d /etc/update-motd.d/logo ]; then
-        status_msg "Console MotD already installed, skipping..."
-    else
-        status_msg "Installing console MotD"
-
-        # Disable standard LastLog info
-        # There is a bug with `sed -i` that is causing permissions issues, so we are
-        # doing it the long way
-        sed '/PrintLastLog/cPrintLastLog no' /etc/ssh/sshd_config >tmp
-        sudo mv -f tmp /etc/ssh/sshd_config
-        chmod 0644 /etc/ssh/sshd_config
-
-        # Disable default static MoTD
-        do_action_service disable motd
-        sudo rm -rf /etc/motd
-
-        # Disable default dynamic MoTD
-        sudo rm -rf /etc/update-motd.d
-
-        sudo mkdir /etc/update-motd.d
-        sudo cp -r "$REPO_PATH"/motd/. /etc/update-motd.d
-
-        sudo chmod a+x /etc/update-motd.d/*
-        ok_msg "Console MotD installed!!"
-
-        do_action_service restart sshd
-    fi
-}
-
 function link_config() {
     local data_path=$1
     local config_path=$data_path"/config"
@@ -135,7 +105,6 @@ EOF
 
 clone_config
 install_plugins
-setup_ssh_motd
 
 for dir in "$REPO_PATH"/printer_*/; do
     dir=${dir%*/}      # remove the trailing "/"

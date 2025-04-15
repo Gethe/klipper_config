@@ -64,37 +64,41 @@ defaults for all defined user vars, along with any necessary documentation.
 Installation
 ------------
 
-You should start with a fresh OS installation, like [Raspberry Pi OS Lite]. If
-using a some other spare computer, I recommend [Pop!_OS]. I also recommend
-setting up any OS level customizations like wifi, ssh, hostname, etc., then
-making a [backup image] prior to installing this config. This can then be used
-to quickly spin up a new printer, or recover an existing one.
+### Repo Setup ###
 
-Next, you'll need to [fork this repo] and rename the `printer_<name>` folders to
+First, you'll need to [fork this repo] and rename the `printer_<name>` folders to
 match your setup. If you're not comfortable with linux and git commands, you can
-press period (.) to open web vs code. From here you can rename the folders and
-then in the Source Control tab enter "Rename printer folders" as the message and
-click "Commit & Push".
+press period (.) to open a web version of VS Code. From here you can rename the
+folders and then in the Source Control tab enter "Rename printer folders" as the
+message and click "Commit & Push".
 
-Install [KIAUH] and use [this guide] to install [Kalico]. If installing multiple
-instances, be sure to use the same names used for the folders above. You'll also
-need to install [Moonraker] and [Fluidd], as well as to flash your MCU(s).
+### OS Setup ###
+
+Start with a fresh OS installation, like [Raspberry Pi OS Lite]. If using some
+other spare computer, I recommend [Pop!_OS]. Set up any OS-level customizations
+like wifi, ssh, etc., then run the `setupOS` script:
 
 ``` bash
-wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/install.sh | bash
+wget -O - https://raw.githubusercontent.com/gethe/klipper_config/main/setupOS.sh | bash <userName>/klipper_config
+```
+
+This script will install certain dependencies like git and then clone [KIAUH],
+[Kalico], [Moonraker], [Fluidd], [Shake&Tune], and your fork of this repo. When
+finished, it will start KIAUH to continue setup.
+
+### Config Installation ###
+
+At this point, I recommend making a [backup image] of the current OS state. This
+can then be used to quickly spin up a new printer, or recover an existing one.
+
+``` bash
+./klipper_config/install.sh
 ```
 
 The install script will look for folders matching the default patterns used by
 KIAUH -- `~/printer_data` for single-instance setups and `~/printer_<name>_data`
 for multi-instance setups. If you're using a different naming scheme, the full
 path can be supplied as an optional second parameter to the install script.
-
-If you're setting up a new printer on a multi-instance host, run this command
-from `$HOME`:
-
-``` bash
-./klipper_config/install.sh <name>
-```
 
 Slicer Configuration
 --------------------
@@ -142,7 +146,7 @@ Projects that this config depends on include:
 * [Kalico]
 * [Moonraker]
 * [Fluidd]
-* [Shake&Tune](https://github.com/Frix-x/klippain-shaketune/tree/main)
+* [Shake&Tune]
 
 Many of the scripts, macros, and config files included in this repo are based on
 or inspired by work from:
@@ -158,12 +162,12 @@ or inspired by work from:
 * nachoparker - [Customize your MOTD](https://web.archive.org/web/20180729211018/https://ownyourbits.com/2017/04/05/customize-your-motd-login-message-in-debian-and-ubuntu/)
 * Drachenkatze - [Automating Klipper MCU Updates](https://docs.vorondesign.com/community/howto/drachenkatze/automating_klipper_mcu_updates.html)
 
+[fork this repo]: https://github.com/gethe/klipper_config/fork
+[Raspberry Pi OS Lite]: https://www.raspberrypi.com/software/
+[Pop!_OS]: https://pop.system76.com/
 [KIAUH]: https://github.com/dw-0/kiauh
 [Kalico]: https://github.com/KalicoCrew/kalico
 [Moonraker]: https://github.com/Arksine/moonraker
 [Fluidd]: https://github.com/fluidd-core/fluidd
-[Raspberry Pi OS Lite]: https://www.raspberrypi.com/software/
-[Pop!_OS]: https://pop.system76.com/
+[Shake&Tune]: https://github.com/Frix-x/klippain-shaketune/tree/main
 [backup image]: https://www.tomshardware.com/how-to/back-up-raspberry-pi-as-disk-image/
-[this guide]: https://docs.kalico.gg/Migrating_from_Klipper.html#option-2-using-kiauh
-[fork this repo]: https://github.com/gethe/klipper_config/fork
